@@ -1,5 +1,5 @@
 // I-shaped tetromino
-// Copyright 2014 Christopher Claoue-Long
+// 2014 Christopher Claoue-Long
 
 #ifndef TETROMINO_I_TETROMINO // prevents errors from including it multiple times
 #define TETROMINO_I_TETROMINO
@@ -32,7 +32,7 @@ class I_Tetromino : protected Tetromino{
 
     ///////////////////////// CONSTRUCTOR //////////////////////////////////////
     I_Tetromino(){
-        startPosition = 3;
+        startPosition = 5;
         shape = (int**) i0;
         offset = 0;
     }

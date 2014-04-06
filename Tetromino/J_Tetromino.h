@@ -1,4 +1,5 @@
 // J-shaped tetromino
+// 2014 Christopher Claoue-Long
 
 #ifndef TETROMINO_J_TETROMINO // prevents errors from including it multiple times
 #define TETROMINO_J_TETROMINO

@@ -1,4 +1,5 @@
 // O-shaped tetromino
+// 2014 Christopher Claoue-Long
 
 #ifndef TETROMINO_O_TETROMINO // prevents errors from including it multiple times
 #define TETROMINO_O_TETROMINO
@@ -31,7 +32,7 @@ class O_Tetromino : protected Tetromino{
 
     ///////////////////////// CONSTRUCTOR //////////////////////////////////////
     O_Tetromino(){
-        startPosition = 3;
+        startPosition = 5;
         shape = (int**) i0;
         offset = 0;
     }
