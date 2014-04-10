@@ -18,17 +18,12 @@ class MinoFactory{
 		new J_Tetromino(), new L_Tetromino(), new O_Tetromino(), 
 		new T_Tetromino(), new S_Tetromino(), new Z_Tetromino()};
         
-		Tetromino[] shuffledPieces;
-        
-		int counter;
-        void shuffleTetrominoes();
-        void newSet();
+	int counter;
         void shuffleIntArray();
 		int[] generation = {0,1,2,3,4,5,6};
     ///////////////////////// CONSTRUCTOR //////////////////////////////////////
     MinoFactory(){
         counter = 0;
-        shuffleTetrominoes();
     }
 
 
