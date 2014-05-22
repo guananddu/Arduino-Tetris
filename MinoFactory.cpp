@@ -9,11 +9,10 @@
 Tetromino MinoFactory::newPiece(){
     counter ++;
     if(counter > 7) { // finished up all the pieces!
-    	counter = 1;
+    	counter = 0;
     	shuffleIntArray(); // now have a new generation of pieces
     }
     return generatedPieces[generation[counter-1]];
-    
     
 }
 
