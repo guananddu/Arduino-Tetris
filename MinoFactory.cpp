@@ -14,10 +14,10 @@ Tetromino MinoFactory::newPiece(){
     }
     return generatedPieces[generation[counter-1]];
     
-    }
+    
 }
 
-void MinoFactory::shuffleIntArray()
+void MinoFactory::shuffleIntArray(){
     vector<int> randomiser(generation, generation+7);
     random_shuffle(randomiser.begin(), randomiser.end()); 
     int i = 0;
@@ -25,6 +25,6 @@ void MinoFactory::shuffleIntArray()
     	generation[i] = it;
     	i++;
     }
-    }
+
 }
 
