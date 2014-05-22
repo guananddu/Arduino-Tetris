@@ -29,7 +29,7 @@ class Controller {
     private:
         bool gameOver = false;
         int r, c, x, i, topCoord;
-        protected int[] topRow = new int[10];
+        int[] topRow = new int[10];//Top row of the Deadblocks
         //private Color[][] deadBlockArray = new Color [22][10];
         Tetromino currPiece;
         MinoFactory pieceGen = new MinoFactory();    
