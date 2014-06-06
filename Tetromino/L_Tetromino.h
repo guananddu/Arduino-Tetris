@@ -1,6 +1,6 @@
 // L-shaped tetromino
 // 2014 Christopher Claoue-Long
-
+// refer to Z tetromino for code info/comments
 #ifndef TETROMINO_L_TETROMINO // prevents errors from including it multiple times
 #define TETROMINO_L_TETROMINO
 

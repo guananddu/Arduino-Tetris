@@ -9,14 +9,14 @@
 //	If the piece hasn't landed it checks the move is legal and if it is places the piece. 
 
 void Controller::movePiece(/*INPUT HERE*/) {
-	// write code here
+	
 }
 
 
 //  	This method checks if a piece can move to the next place it needs to move by testing whether the piece will 
 // 	go out of bounds or if the place it wants to move into is empty
 bool Controller::isLegal(/*INPUT HERE*/) {
-	// write code here
+	
 }
 
 
@@ -34,7 +34,9 @@ bool Controller::gameOver() {
 
 //  reset all the variables back to base value so you can start a new game
 void Controller::reset() {
-	// write code here
+	gameOver = false;
+	r, c, x, i, topCoord = 0;
+	//recreate deadblockarray and toprow
 }
 
 
@@ -42,7 +44,10 @@ void Controller::reset() {
 // drop by one because you know the highest piece in that row already. 
 
 bool Controller::belowTopRow(/*INPUT HERE*/) {
-	// write code here
+	//if tetromino (getshape?) is > or < deadblock array?
+		//return true;
+	//else
+		//return false;
 }
 
 //  This method spawns a piece when required.
@@ -58,10 +63,11 @@ bool Controller::hasLanded() {
 //  * This method checks if a movement will be out of bounds or not. It is a helper method for isLegal().
 // Particularly good for if it is going to go out of the array sides.
 bool Controller::outOfBounds(/*INPUT HERE*/) {
-	// write code here
+	// if piece size is > board size,
+		//kick - 1 space
 }
 
 // this methods gets a piece when you are ready for it
 void getPiece(){
-    // write code here
+    MinoFactory::newPiece();
 }

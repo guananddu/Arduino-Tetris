@@ -10,7 +10,7 @@ class MinoFactory{
 	
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
     protected:
-        Tetromino newPiece();
+        Tetromino newPiece(); //defins a new functioin that will return a tetromino
 
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
     private:
@@ -19,8 +19,8 @@ class MinoFactory{
 		new T_Tetromino(), new S_Tetromino(), new Z_Tetromino()};
         
 	int counter;
-        void shuffleIntArray();
-		int[] generation = {0,1,2,3,4,5,6};
+    void shuffleIntArray();
+	int[] generation = {0,1,2,3,4,5,6};
     ///////////////////////// CONSTRUCTOR //////////////////////////////////////
     MinoFactory(){
         counter = 0;
