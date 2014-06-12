@@ -35,15 +35,16 @@ bool Controller::gameOver() {
 //  reset all the variables back to base value so you can start a new game
 void Controller::reset() {
 	gameOver = false;
-	r, c, x, i, topCoord = 0;
-	//recreate deadblockarray and toprow
+	r = c = x = i = topCoord = 0;
+	topRow = new int[10];
+	//recreate deadblockarray?
 }
 
 
 //  This method needs to return the highest piece in the current board array - this means that you can easily check if the piece can 
 // drop by one because you know the highest piece in that row already. 
 
-bool Controller::belowTopRow(/*INPUT HERE*/) {
+bool Controller::belowTopRow(Tetromino p) {
 	//if tetromino (getshape?) is > or < deadblock array?
 		//return true;
 	//else
