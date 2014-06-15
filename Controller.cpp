@@ -8,27 +8,50 @@
 //	If this is the case, it places the piece and gets a new piece. 
 //	If the piece hasn't landed it checks the move is legal and if it is places the piece. 
 
-void Controller::movePiece(/*INPUT HERE*/) {
-	
+void Controller::movePiece(/*INPUT HERE*/) {  //just worrying about gravity (moving down for the moment)
+	/*move topCoord??*/ 
+	topCoord = topCoord + 10
+	if (hasLanded = false){
+		if (isLegal = true){
+			//do nothing?? or placePiece
+		}
+		else{
+			//unknown
+		}
+	}
+	else{
+		placePiece;
+	}
 }
 
 
 //  	This method checks if a piece can move to the next place it needs to move by testing whether the piece will 
 // 	go out of bounds or if the place it wants to move into is empty
 bool Controller::isLegal(/*INPUT HERE*/) {
-	
+	if /*place is empty&&not out of bounds*/{
+		return 1;
+	}
+	else{
+		return 0;
+	}
 }
 
 
 //   This function returns whether a collision with another piece or a wall could occur if you moved to the new position.
 bool Controller::collisionCheck(/*INPUT HERE*/) {
-	// write code here
+	// if hits (how to test if it hits something) something
+	//return 1;
 }
 
 
 //  This method checks if the board is in a game over situation or not and returns the appropriate boolean.
 bool Controller::gameOver() {
-	if (gmaesss)
+	if deadBlockArray > /*board*/{
+		return 1;
+	}
+	else{
+		return 0;
+	}
 }
 
 
@@ -37,7 +60,7 @@ void Controller::reset() {
 	gameOver = false;
 	r = c = x = i = topCoord = 0;
 	topRow = new int[10];
-	//recreate deadblockarray?
+	//recreate deadBlockArray?
 }
 
 
@@ -58,7 +81,8 @@ void Controller::placePiece() {
 
 //  * This method checks if a piece has landed, and returns the appropriate boolean. (CLUE: Use belowTopRow)
 bool Controller::hasLanded() {
-	// write code here
+	//if tetromino is belowTopRow{
+		return true;
 }
 
 //  * This method checks if a movement will be out of bounds or not. It is a helper method for isLegal().

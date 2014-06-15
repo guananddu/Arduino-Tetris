@@ -3,7 +3,7 @@
 
 #include "MinoFactory.h"
 #include <vector>
-#include <algorithim>
+#include <algorithm>
 
 //  This method is called by controller to get a new piece when I need one.
 Tetromino MinoFactory::newPiece(){
