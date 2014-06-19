@@ -36,14 +36,6 @@ bool Controller::isLegal(/*INPUT HERE*/) {
 	}
 }
 
-
-//   This function returns whether a collision with another piece or a wall could occur if you moved to the new position.
-bool Controller::collisionCheck(/*INPUT HERE*/) {
-	// if hits (how to test if it hits something) something
-	//return 1;
-}
-
-
 //  This method checks if the board is in a game over situation or not and returns the appropriate boolean.
 bool Controller::gameOver() {
 	if deadBlockArray > /*board*/{
@@ -64,16 +56,6 @@ void Controller::reset() {
 }
 
 
-//  This method needs to return the highest piece in the current board array - this means that you can easily check if the piece can 
-// drop by one because you know the highest piece in that row already. 
-
-bool Controller::belowTopRow(Tetromino p) {
-	//if tetromino (getshape?) is > or < deadblock array?
-		//return true;
-	//else
-		//return false;
-}
-
 //  This method spawns a piece when required.
 void Controller::placePiece() {
 	// write code here
@@ -83,13 +65,6 @@ void Controller::placePiece() {
 bool Controller::hasLanded() {
 	//if tetromino is belowTopRow{
 		return true;
-}
-
-//  * This method checks if a movement will be out of bounds or not. It is a helper method for isLegal().
-// Particularly good for if it is going to go out of the array sides.
-bool Controller::outOfBounds(/*INPUT HERE*/) {
-	// if piece size is > board size,
-		//kick - 1 space
 }
 
 // this methods gets a piece when you are ready for it
