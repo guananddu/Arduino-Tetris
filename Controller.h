@@ -14,6 +14,8 @@
 #define int PREVIEWCOLUMNSIZE = 4;
 #define int SHAPESIZE = 4;
 
+#define int BLACK = 0;
+
 class Controller {
 
     ///////////////////////// PUBLIC ATTRIBUTES ////////////////////////////////
@@ -28,7 +30,7 @@ class Controller {
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
     private:
         bool gameOver = false;
-        int r, c, x, i, topCoord;
+        int r, c, x, i, y, topCoord;
         int[] topRow = new int[10];//Top row of the Deadblocks
 		//private Color[][] deadBlockArray = new Color [22][10];
         Tetromino currPiece;
@@ -43,6 +45,7 @@ class Controller {
         bool hasLanded();
         bool outOfBounds(/*INPUT HERE*/);
         void getPiece();
+		bool checkBelow();
 	
 
     ///////////////////////// CONSTRUCTOR //////////////////////////////////////
