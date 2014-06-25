@@ -24,8 +24,9 @@ class T_Tetromino : protected Tetromino{
 
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
     private:
-
-        int i0[4][2] = {{0,0},{0,1},{1,1},{1,2}}; // this defines the shape of the tetromino -------------------------- top piece -= 1 for 0 and -=22 for 2
+		/*these define shapes of the tetromino*/
+        int i0[4][2] = {{0,0},{1,0},{1,1},{2,1}}; //correct
+		int
         int** shape;
         int offset;
 

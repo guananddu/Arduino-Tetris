@@ -45,7 +45,10 @@ class Controller {
         bool hasLanded();
         bool outOfBounds(/*INPUT HERE*/);
         void getPiece();
+		
 		bool checkBelow();
+		bool checkRight();
+		bool checkLeft();
 	
 
     ///////////////////////// CONSTRUCTOR //////////////////////////////////////

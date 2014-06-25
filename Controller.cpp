@@ -42,6 +42,24 @@ bool Controller::checkBelow(int** blocks){
 		
 }
 
+bool Controller::checkRight(int** blocks){
+	for (i = 0; i<4; i++){
+		if (deadBlockArray[blocks[i][0] + (topCoord/10) + 1][blocks[i][1] + (topCoord%10) + 1] != BLACK){
+			return false;
+		}
+	}
+	return true;
+}
+
+bool Controller::checkLeft(int** blocks){
+	for (i = 0; i<4; i++){
+		if (deadBlockArray[blocks[i][0] + (topCoord/10) - 1][blocks[i][1] + (topCoord%10) -1 1] != BLACK){
+			return false;
+		}
+	}
+	return true;
+}
+
 //  This method checks if the board is in a game over situation or not and returns the appropriate boolean.
 bool Controller::gameOver() {
 	
