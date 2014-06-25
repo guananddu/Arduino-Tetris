@@ -26,7 +26,7 @@ void Controller::movePiece(/*INPUT HERE*/) {  //just worrying about gravity (mov
 //  	This method checks if a piece can move to the next place it needs to move by testing whether the piece will 
 // 	go out of bounds or if the place it wants to move into is empty
 bool Controller::isLegal(int** blocks) {
-	
+	//TODO   write helper functions for left and right - check deadblockarray, and boundaries.
 	return checkBelow(blocks);
 }
 
