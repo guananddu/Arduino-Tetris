@@ -26,19 +26,25 @@ class T_Tetromino : protected Tetromino{
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
     private:
 
-                int i0[4][2] = {{0,1},{1,1},{2,1},{1,2}};
-		int i1[4][2] = {{0,1},{1,0},{1,1},{1,2}};
-		int i2[4][2] = {{1,1},{0,2},{1,2},{2,2}};
-		int i3[4][2] = {{2,1},{1,0},{1,1},{1,2}};
-                 int** shape;
+                static int t0[4][2];
+		static int t1[4][2];
+		static int t2[4][2];
+		static int t3[4][2];
+                int** shape;
 
 
     ///////////////////////// CONSTRUCTOR //////////////////////////////////////
     T_Tetromino(){
         startPosition = 3;
-        shape = (int**) i0;
+        shape = (int**) t0;
+
     }
 
 };
+
+int T_Tetromino::t0[4][2] = {{0,1},{1,1},{2,1},{1,2}};
+int T_Tetromino::t1[4][2] = {{0,1},{1,0},{1,1},{1,2}};
+int T_Tetromino::t2[4][2] = {{1,1},{0,2},{1,2},{2,2}};
+int T_Tetromino::t3[4][2] = {{2,1},{1,0},{1,1},{1,2}};
 
 #endif

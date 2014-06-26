@@ -25,19 +25,26 @@ class L_Tetromino : protected Tetromino{
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
     private:
 
-        int i0[4][2] = {{0,1},{0,2},{1,1},{2,1}};
-		int i1[4][2] = {{0,0},{1,0},{1,1},{1,2}};
-		int i2[4][2] = {{2,0},{2,1},{2,2},{1,2}};
-		int i3[4][2] = {{1,0},{1,1},{1,2},{2,2}};
+        static int l0[4][2];
+		static int l1[4][2];
+		static int l2[4][2];
+		static int l3[4][2];
         int** shape;
 
 
     ///////////////////////// CONSTRUCTOR //////////////////////////////////////
     L_Tetromino(){
         startPosition = 3;
-        shape = (int**) i0;
+        shape = (int**) l0;
     }
 
 };
 
+int L_Tetromino::l0[4][2] = {{0,1},{0,2},{1,1},{2,1}};
+int L_Tetromino::l1[4][2] = {{0,0},{1,0},{1,1},{1,2}};
+int L_Tetromino::l2[4][2] = {{2,0},{2,1},{2,2},{1,2}};
+int L_Tetromino::l3[4][2] = {{1,0},{1,1},{1,2},{2,2}};
+
+
 #endif
+

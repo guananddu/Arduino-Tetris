@@ -6,7 +6,7 @@
 
 #include "Tetromino.h"
 
-class T_Tetromino : protected Tetromino{
+class Z_Tetromino : protected Tetromino{
 
     ///////////////////////// PUBLIC ATTRIBUTES ////////////////////////////////
     public:
@@ -25,19 +25,26 @@ class T_Tetromino : protected Tetromino{
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
     private:
 		/*these define shapes of the tetromino*/
-        int i0[4][2] = {{0,1},{1,1},{1,2},{2,2}};
-		int i1[4][2] = {{2,0},{2,1},{1,1},{1,2}};
-		int i2[4][2] = {{0,1},{1,1},{1,2},{2,2}};
-		int i3[4][2] = {{2,0},{2,1},{1,1},{1,2}};
+        static int z0[4][2];
+		static int z1[4][2];
+		static int z2[4][2];
+		static int z3[4][2];
         int** shape;
 
 
     ///////////////////////// CONSTRUCTOR //////////////////////////////////////
     Z_Tetromino(){
         startPosition = 3;
-        shape = (int**) i0;
+        shape = (int**) z0;
     }
 
 };
 
+int Z_Tetromino::z0[4][2] = {{0,1},{1,1},{1,2},{2,2}};
+int Z_Tetromino::z1[4][2] = {{2,0},{2,1},{1,1},{1,2}};
+int Z_Tetromino::z2[4][2] = {{0,1},{1,1},{1,2},{2,2}};
+int Z_Tetromino::z3[4][2] = {{2,0},{2,1},{1,1},{1,2}};
+
+
 #endif
+

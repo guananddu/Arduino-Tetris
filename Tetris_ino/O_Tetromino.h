@@ -25,16 +25,19 @@ class O_Tetromino : protected Tetromino{
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
     private:
 
-        int i0[4][2] = {{1,1},{2,1},{1,2},{2,2}};
+        static int o0[4][2];
         int** shape;
 
 
     ///////////////////////// CONSTRUCTOR //////////////////////////////////////
     O_Tetromino(){
         startPosition = 5;
-        shape = (int**) i0;
+        shape = (int**) o0;
     }
 
 };
 
+int O_Tetromino::o0[4][2] = {{1,1},{2,1},{1,2},{2,2}};
+
 #endif
+
