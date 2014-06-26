@@ -1,0 +1,4 @@
+- If you want this to perfectly recreate tetris you need a timer of sorts in the main class that will go off every 1/60th of a second (This will force 60fps for gameplay)
+- A cool variant of tetris could be to get the board to "transpose" (i.e. rotate 90deg) after a set time! Have a square board and a timer to control this behaviour.  A simple one would just be to have the tetris blocks as "clouds" floating upwards instead.
+- You could try and implement "welltris" (everything falls down a "well" or funnel), or "hattris" lining up same coloured blocks to score instead of clearing lines, or even "bombliss" if you're clever (lining up same-coloured minos causes them to explode).
+-- Get a simple controller and board going which can pile up tetrominoes (not even rotations) running at 60fps, and ends when they reach the top, before trying any of the above.
