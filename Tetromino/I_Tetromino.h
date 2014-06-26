@@ -25,16 +25,17 @@ class I_Tetromino : protected Tetromino{
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
     private:
 
-        int i0[4][2] = {{0,0},{1,0},{2,0},{3,0}}; // correct
+        int i0[4][2] = {{0,1},{1,1}{2,1},{3,1}}; 
+		int i1[4][2] = {{3,0},{3,1}{3,2},{3,3}};
+		int i2[4][2] = {{0,2},{1,2}{2,2},{3,2}};
+		int i3[4][2] = {{2,0},{2,1}{2,2},{2,3}};
         int** shape;
-        int offset;
 
 
     ///////////////////////// CONSTRUCTOR //////////////////////////////////////
     I_Tetromino(){
         startPosition = 5;
         shape = (int**) i0;
-        offset = 0;
     }
 
 };
