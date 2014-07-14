@@ -6,10 +6,11 @@
 
 class Tetromino {
     public:
-        virtual char blockLetter() = 0;
+        virtual char blockLetter();
+        Tetromino generate();
 
     protected:
-        virtual int** getShape() = 0; // returns a pointer to an int[][]
+        virtual int** getShape(); // returns a pointer to an int[][]
         int startPosition;
         int offset;
 

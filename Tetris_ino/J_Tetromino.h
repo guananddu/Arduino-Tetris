@@ -6,7 +6,7 @@
 
 #include "Tetromino.h"
 
-class J_Tetromino : protected Tetromino{
+class J_Tetromino : public Tetromino{
 
     ///////////////////////// PUBLIC ATTRIBUTES ////////////////////////////////
     public:
@@ -15,6 +15,11 @@ class J_Tetromino : protected Tetromino{
             return 'J';
         }
 
+    ///////////////////////// CONSTRUCTOR //////////////////////////////////////
+    J_Tetromino(){
+        startPosition = 3;
+        shape = (int**) j0;
+    }
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
     protected:
 
@@ -32,11 +37,6 @@ class J_Tetromino : protected Tetromino{
         int** shape;
 
 
-    ///////////////////////// CONSTRUCTOR //////////////////////////////////////
-    J_Tetromino(){
-        startPosition = 3;
-        shape = (int**) j0;
-    }
 
 };
 

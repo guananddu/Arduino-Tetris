@@ -6,7 +6,7 @@
 
 #include "Tetromino.h"
 
-class O_Tetromino : protected Tetromino{
+class O_Tetromino : public Tetromino{
 
     ///////////////////////// PUBLIC ATTRIBUTES ////////////////////////////////
     public:
@@ -14,6 +14,12 @@ class O_Tetromino : protected Tetromino{
         char blockLetter(){
             return 'O';
         }
+
+    ///////////////////////// CONSTRUCTOR //////////////////////////////////////
+    O_Tetromino(){
+        startPosition = 5;
+        shape = (int**) o0;
+    }
 
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
     protected:
@@ -29,11 +35,6 @@ class O_Tetromino : protected Tetromino{
         int** shape;
 
 
-    ///////////////////////// CONSTRUCTOR //////////////////////////////////////
-    O_Tetromino(){
-        startPosition = 5;
-        shape = (int**) o0;
-    }
 
 };
 

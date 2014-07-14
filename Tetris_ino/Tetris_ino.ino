@@ -2,6 +2,15 @@
 // 2014 Chris Claoue-Long
 
 // include the needed subparts
+#include <stdlib.h>
+#include <StandardCplusplus.h>
+#include <serstream>
+#include <string>
+#include <vector>
+#include <iterator>
+
+using namespace std;
+
 #include "Controller.cpp"
 #include "ModelBoard.cpp"
 #include "View.cpp"

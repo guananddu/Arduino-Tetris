@@ -1,12 +1,12 @@
 // s-shaped tetromino
 // 2014 Christopher Claoue-Long
 // refer to Z tetromino for code info/comments
-#ifndef TETROMINO_O_TETROMINO // prevents errors from including it multiple times
-#define TETROMINO_O_TETROMINO
+#ifndef TETROMINO_S_TETROMINO // prevents errors from including it multiple times
+#define TETROMINO_S_TETROMINO
 
 #include "Tetromino.h"
 
-class S_Tetromino : protected Tetromino{
+class S_Tetromino : public Tetromino{
 
     ///////////////////////// PUBLIC ATTRIBUTES ////////////////////////////////
     public:
@@ -15,6 +15,11 @@ class S_Tetromino : protected Tetromino{
             return 'S';
         }
 
+    ///////////////////////// CONSTRUCTOR //////////////////////////////////////
+    S_Tetromino(){
+        startPosition = 3;
+        shape = (int**) s0;
+    }
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
     protected:
 
@@ -25,17 +30,13 @@ class S_Tetromino : protected Tetromino{
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
     private:
 
+    int** shape;
         static int s0[4][2];
 		static int s1[4][2];
 		static int s2[4][2];
 		static int s3[4][2];
 
 
-    ///////////////////////// CONSTRUCTOR //////////////////////////////////////
-    S_Tetromino(){
-        startPosition = 3;
-        shape = (int**) s0;
-    }
 
 };
 
