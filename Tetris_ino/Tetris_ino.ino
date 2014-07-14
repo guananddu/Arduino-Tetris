@@ -11,6 +11,7 @@
 
 using namespace std;
 
+#include "Tetromino.h"
 #include "TETROMINOES.h"
 #include "MinoFactory.h"
 
@@ -18,11 +19,17 @@ using namespace std;
 //#include "ModelBoard.cpp" // TODO model 
 #include "View.h"
 
+/*
+intrupt with left button function(){
+    //movePiece('L'); 
+    Serial.println("Left button pressed"); 
+}
+*/
 
 Controller* control; 
 
 ISR (TIMER_1_COMPA_vect){
-	control->movePiece();  
+	control->movePiece('D');  
 }
 
 void setup(){
@@ -35,7 +42,8 @@ void setup(){
 	TCCR1B |= (1 << WGM12); 
 	TCCR1B |= (1 << CS12); 
 	TIMSK1 |= (1 << OCR1A); 
-
+        interrupts();
+        
 	control = new Controller(); 
 
 }
@@ -43,5 +51,7 @@ void setup(){
 void loop(){
 //     DO STUFF HERE
 }
+
+
 
 

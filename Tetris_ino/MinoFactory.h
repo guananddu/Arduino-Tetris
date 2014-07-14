@@ -26,7 +26,7 @@ class MinoFactory{
             generation[i] = i;
         }
         shuffleIntArray();
-    }
+    };
 
 
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
@@ -44,4 +44,6 @@ class MinoFactory{
 };
 
 #endif
+
+
 

@@ -15,6 +15,9 @@ class T_Tetromino : public Tetromino{
         char blockLetter(){
             return 'T';
         }
+        int** getShape() {
+            return shape;
+        }
 
     ///////////////////////// CONSTRUCTOR //////////////////////////////////////
     T_Tetromino(){
@@ -26,9 +29,6 @@ class T_Tetromino : public Tetromino{
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
     protected:
 
-        int** getShape() {
-            return shape;
-        }
 
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
     private:
@@ -43,9 +43,6 @@ class T_Tetromino : public Tetromino{
 
 };
 
-int T_Tetromino::t0[4][2] = {{0,1},{1,1},{2,1},{1,2}};
-int T_Tetromino::t1[4][2] = {{0,1},{1,0},{1,1},{1,2}};
-int T_Tetromino::t2[4][2] = {{1,1},{0,2},{1,2},{2,2}};
-int T_Tetromino::t3[4][2] = {{2,1},{1,0},{1,1},{1,2}};
-
 #endif
+
+

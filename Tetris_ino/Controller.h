@@ -5,7 +5,7 @@
 #define CONTROLLER_HEADER
 
 #include "TETROMINOES.h"
-#include "MinoFactory.cpp"
+#include "MinoFactory.h"
 
 #define ROWSIZE 21
 #define COLUMNSIZE 9
@@ -19,7 +19,7 @@ class Controller {
 
     ///////////////////////// PUBLIC ATTRIBUTES ////////////////////////////////
     public:
-        void movePiece(/*INPUT HERE*/);
+        void movePiece(char letter);
 
     ///////////////////////// CONSTRUCTOR //////////////////////////////////////
     Controller(){
@@ -60,4 +60,6 @@ class Controller {
 };
 
 #endif
+
+
 

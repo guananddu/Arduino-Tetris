@@ -14,8 +14,12 @@ class Z_Tetromino : public Tetromino{
         char blockLetter(){ //returns the block letter of the tetromino
             return 'Z';
         }
+        int** getShape() { //this returns the actual shape of the tetromino, eg a T "shape" no the letter
+            return shape;
+        }
 
     ///////////////////////// CONSTRUCTOR //////////////////////////////////////
+
     Z_Tetromino(){
         startPosition = 3;
         shape = (int**) z0;
@@ -24,9 +28,6 @@ class Z_Tetromino : public Tetromino{
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
     protected:
 
-        int** getShape() { //this returns the actual shape of the tetromino, eg a T "shape" no the letter
-            return shape;
-        }
 
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
     private:
@@ -41,11 +42,8 @@ class Z_Tetromino : public Tetromino{
 
 };
 
-int Z_Tetromino::z0[4][2] = {{0,1},{1,1},{1,2},{2,2}};
-int Z_Tetromino::z1[4][2] = {{2,0},{2,1},{1,1},{1,2}};
-int Z_Tetromino::z2[4][2] = {{0,1},{1,1},{1,2},{2,2}};
-int Z_Tetromino::z3[4][2] = {{2,0},{2,1},{1,1},{1,2}};
-
 
 #endif
+
+
 

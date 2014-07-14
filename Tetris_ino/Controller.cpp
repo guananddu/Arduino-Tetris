@@ -8,7 +8,7 @@
 //	If this is the case, it places the piece and gets a new piece. 
 //	If the piece hasn't landed it checks the move is legal and if it is places the piece. 
 
-void Controller::movePiece(/*INPUT HERE*/) {  //just worrying about gravity (moving down for the moment)
+void Controller::movePiece(char letter) {  //just worrying about gravity (moving down for the moment)
 	int** blocks = currPiece->getShape();
 	if (hasLanded(blocks)){
 		placePiece(blocks);
@@ -86,6 +86,8 @@ void Controller::placePiece(int** blocks) {
 bool Controller::hasLanded(int** blocks) {
 	return (!checkBelow(blocks));
 }
+
+
 
 
 
