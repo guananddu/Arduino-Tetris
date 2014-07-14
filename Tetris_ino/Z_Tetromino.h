@@ -19,6 +19,7 @@ class Z_Tetromino : public Tetromino{
     Z_Tetromino(){
         startPosition = 3;
         shape = (int**) z0;
+        colour = "red";
     }
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
     protected:

@@ -20,6 +20,7 @@ class T_Tetromino : public Tetromino{
     T_Tetromino(){
         startPosition = 3;
         shape = (int**) t0;
+        colour = "purple";
 
     }
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////

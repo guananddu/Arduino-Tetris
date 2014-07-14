@@ -19,6 +19,7 @@ class J_Tetromino : public Tetromino{
     J_Tetromino(){
         startPosition = 3;
         shape = (int**) j0;
+        colour = "blue";
     }
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
     protected:

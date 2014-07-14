@@ -19,6 +19,7 @@ class L_Tetromino : public Tetromino{
     L_Tetromino(){
         startPosition = 3;
         shape = (int**) l0;
+        colour = "orange";
     }
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
     protected:

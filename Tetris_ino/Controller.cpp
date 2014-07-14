@@ -9,11 +9,11 @@
 //	If the piece hasn't landed it checks the move is legal and if it is places the piece. 
 
 void Controller::movePiece(/*INPUT HERE*/) {  //just worrying about gravity (moving down for the moment)
-	int** blocks = currPiece.getShape();
+	int** blocks = currPiece->getShape();
 	if (hasLanded(blocks)){
 		placePiece(blocks);
-		currPiece = pieceGen.newPiece();
-		topCoord = currPiece.startPosition;
+		currPiece = pieceGen->newPiece();
+		topCoord = currPiece->startPosition;
 	}
 	else{
 		if (isLegal(blocks)){
@@ -53,7 +53,7 @@ bool Controller::checkRight(int** blocks){
 
 bool Controller::checkLeft(int** blocks){
 	for (i = 0; i<4; i++){
-		if (deadBlockArray[blocks[i][0] + (topCoord/10) - 1][blocks[i][1] + (topCoord%10) -1 1] != BLACK){
+		if (deadBlockArray[(blocks[i][0] + (topCoord/10) - 1)] [(blocks[i][1] + (topCoord%10) -1 )] != BLACK){
 			return false;
 		}
 	}
@@ -61,7 +61,7 @@ bool Controller::checkLeft(int** blocks){
 }
 
 //  This method checks if the board is in a game over situation or not and returns the appropriate boolean.
-bool Controller::gameOver() {
+bool Controller::isGameOver() {
 	
 }
 
@@ -70,18 +70,20 @@ bool Controller::gameOver() {
 void Controller::reset() {
 	gameOver = false;
 	r = c = x = i = y = topCoord = 0;
-	topRow = new int[10];
+	//topRow = {0,0,0,0,0,0,0,0,0,0};
 	//recreate deadBlockArray?
+        //get new piece
 }
 
 //  This method spawns a piece when required.
 void Controller::placePiece(int** blocks) {
 	for (i=0; i<4; i++){
-		deadBlockArray[blocks[i][0] + (topCoord/10)][blocks[i][1] + (topCoord%10)] = currPiece.colour;
+		deadBlockArray[(blocks[i][0] + (topCoord/10))][(blocks[i][1] + (topCoord%10))] = currPiece->colour;
+        }
 }
 
 //  * This method checks if a piece has landed, and returns the appropriate boolean. (CLUE: Use belowTopRow)
-bool Controller::hasLanded() {
+bool Controller::hasLanded(int** blocks) {
 	return (!checkBelow(blocks));
 }
 

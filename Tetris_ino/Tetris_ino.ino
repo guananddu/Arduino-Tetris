@@ -11,14 +11,18 @@
 
 using namespace std;
 
-#include "Controller.cpp"
-#include "ModelBoard.cpp"
-#include "View.cpp"
+#include "TETROMINOES.h"
+#include "MinoFactory.h"
 
-Controller control; 
+#include "Controller.h"
+//#include "ModelBoard.cpp" // TODO model 
+#include "View.h"
+
+
+Controller* control; 
 
 ISR (TIMER_1_COMPA_vect){
-	control.movePiece();  
+	control->movePiece();  
 }
 
 void setup(){
@@ -27,10 +31,10 @@ void setup(){
 	TCCR1B = 0; 
 	TCNT1 = 0; 
 
-	OCRIA = 31250; 
+	OCR1A = 31250; 
 	TCCR1B |= (1 << WGM12); 
 	TCCR1B |= (1 << CS12); 
-	TIMSK1 |= (1 << OCIRA); 
+	TIMSK1 |= (1 << OCR1A); 
 
 	control = new Controller(); 
 

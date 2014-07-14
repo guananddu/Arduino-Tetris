@@ -7,57 +7,55 @@
 #include "TETROMINOES.h"
 #include "MinoFactory.cpp"
 
-#define int ROWSIZE = 21;
-#define int ROWSIZE = 21;
-#define int COLUMNSIZE = 9;
-#define int PREVIEWROWSIZE = 2;
-#define int PREVIEWCOLUMNSIZE = 4;
-#define int SHAPESIZE = 4;
+#define ROWSIZE 21
+#define COLUMNSIZE 9
+#define PREVIEWROWSIZE 2
+#define PREVIEWCOLUMNSIZE 4
+#define SHAPESIZE 4
 
-#define int BLACK = 0;
+#define BLACK 0
 
 class Controller {
 
     ///////////////////////// PUBLIC ATTRIBUTES ////////////////////////////////
     public:
-
-    ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
-    protected:
-        char* deadBlockArray[20][10];
-
         void movePiece(/*INPUT HERE*/);
-
-    ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
-    private:
-        bool gameOver = false;
-        int r, c, x, i, y, topCoord;
-        int[] topRow = new int[10];//Top row of the Deadblocks
-		//private Color[][] deadBlockArray = new Color [22][10];
-        Tetromino currPiece;
-        MinoFactory pieceGen = new MinoFactory();    
-    
-        bool isLegal(/*INPUT HERE*/);
-        bool collisionCheck(/*INPUT HERE*/);
-        bool gameOver();
-        void reset();
-        bool belowTopRow(/*INPUT HERE*/);
-        void placePiece();
-        bool hasLanded();
-        bool outOfBounds(/*INPUT HERE*/);
-        void getPiece();
-		
-		bool checkBelow();
-		bool checkRight();
-		bool checkLeft();
-	
 
     ///////////////////////// CONSTRUCTOR //////////////////////////////////////
     Controller(){
         gameOver = false;
-        pieceGen = new PieceFactory();
+        pieceGen = new MinoFactory();
         reset(); // reset all the items back to original values
-        placePiece(); // place first tetromino
     }
+    ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
+    protected:
+        char* deadBlockArray[20][10];
+
+
+    ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
+    private:
+        bool gameOver;
+        int r, c, x, i, y, topCoord;
+        int topRow[10];//Top row of the Deadblocks
+		//private Color[][] deadBlockArray = new Color [22][10];
+        Tetromino* currPiece;
+        MinoFactory* pieceGen;    
+    
+        bool isLegal(int** blocks);
+        bool collisionCheck(/*INPUT HERE*/);
+        bool isGameOver();
+        void reset();
+        bool belowTopRow(int** blocks);
+        void placePiece(int** blocks);
+        bool hasLanded(int** blocks);
+        bool outOfBounds(/*INPUT HERE*/);
+        void getPiece();
+		
+		bool checkBelow(int** blocks);
+		bool checkRight(int** blocks);
+		bool checkLeft(int** blocks);
+	
+
 
 };
 

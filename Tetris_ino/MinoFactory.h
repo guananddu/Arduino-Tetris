@@ -1,6 +1,9 @@
 // Tetromino Factory Header
 // 2014 Abbie Wade
 
+#ifndef MINOFACTORY
+#define MINOFACTORY
+
 #include <StandardCplusplus.h>
 #include <serstream>
 #include <string>
@@ -13,7 +16,8 @@ class MinoFactory{
 
     ///////////////////////// PUBLIC ATTRIBUTES ////////////////////////////////
     public:
-	
+        Tetromino* newPiece(); //defins a new functioin that will return a tetromino
+
     ///////////////////////// CONSTRUCTOR //////////////////////////////////////
     MinoFactory(){
         counter = 0;
@@ -23,9 +27,10 @@ class MinoFactory{
         }
         shuffleIntArray();
     }
+
+
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
     protected:
-        Tetromino* newPiece(); //defins a new functioin that will return a tetromino
         Tetromino generatedPieces[7];
         
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
@@ -37,4 +42,6 @@ class MinoFactory{
 
 
 };
+
+#endif
 

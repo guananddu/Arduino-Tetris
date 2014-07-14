@@ -19,6 +19,7 @@ class O_Tetromino : public Tetromino{
     O_Tetromino(){
         startPosition = 5;
         shape = (int**) o0;
+        colour = "yellow";
     }
 
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////

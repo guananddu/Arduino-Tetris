@@ -19,6 +19,7 @@ class S_Tetromino : public Tetromino{
     S_Tetromino(){
         startPosition = 3;
         shape = (int**) s0;
+        colour = "green";
     }
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
     protected:
