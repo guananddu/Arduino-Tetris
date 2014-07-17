@@ -11,45 +11,45 @@
 
 using namespace std;
 
-#include "Tetromino.h"
 #include "TETROMINOES.h"
 #include "MinoFactory.h"
-
-#include "Controller.h"
-//#include "ModelBoard.cpp" // TODO model 
+//#include "ModelBoard.cpp" // TODO model
 #include "View.h"
+#include "Controller.h"
 
 /*
 intrupt with left button function(){
-    //movePiece('L'); 
-    Serial.println("Left button pressed"); 
+    //movePiece('L');
+    Serial.println("Left button pressed");
 }
 */
 
-Controller* control; 
+Controller* control;
 
 ISR (TIMER_1_COMPA_vect){
-	control->movePiece('D');  
+    control->movePiece('D');
 }
 
 void setup(){
-	noInterrupts(); 
-	TCCR1A = 0; 
-	TCCR1B = 0; 
-	TCNT1 = 0; 
 
-	OCR1A = 31250; 
-	TCCR1B |= (1 << WGM12); 
-	TCCR1B |= (1 << CS12); 
-	TIMSK1 |= (1 << OCR1A); 
-        interrupts();
-        
-	control = new Controller(); 
+    // Set up the timer
+    noInterrupts();
+    TCCR1A = 0;
+    TCCR1B = 0;
+    TCNT1 = 0;
+
+    OCR1A = 31250;
+    TCCR1B |= (1 << WGM12);
+    TCCR1B |= (1 << CS12);
+    TIMSK1 |= (1 << OCR1A);
+    interrupts();
+
+    control = new Controller();
 
 }
 
 void loop(){
-//     DO STUFF HERE
+//     ONLY WORKS OFF INTERRUPTS, nothing to see here!
 }
 
 

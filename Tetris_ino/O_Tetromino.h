@@ -24,7 +24,6 @@ class O_Tetromino : public Tetromino{
         shape = (int**) o0;
         colour = "yellow";
     }
-
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
     protected:
 
@@ -37,10 +36,7 @@ class O_Tetromino : public Tetromino{
 
 
 
+
 };
 
-
 #endif
-
-
-

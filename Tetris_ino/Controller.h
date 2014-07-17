@@ -37,10 +37,10 @@ class Controller {
         bool gameOver;
         int r, c, x, i, y, topCoord;
         int topRow[10];//Top row of the Deadblocks
-		//private Color[][] deadBlockArray = new Color [22][10];
+        //private Color[][] deadBlockArray = new Color [22][10];
         Tetromino* currPiece;
-        MinoFactory* pieceGen;    
-    
+        MinoFactory* pieceGen;
+
         bool isLegal(int** blocks);
         bool collisionCheck(/*INPUT HERE*/);
         bool isGameOver();
@@ -50,11 +50,11 @@ class Controller {
         bool hasLanded(int** blocks);
         bool outOfBounds(/*INPUT HERE*/);
         void getPiece();
-		
-		bool checkBelow(int** blocks);
-		bool checkRight(int** blocks);
-		bool checkLeft(int** blocks);
-	
+
+        bool checkBelow(int** blocks);
+        bool checkRight(int** blocks);
+        bool checkLeft(int** blocks);
+
 
 
 };

@@ -5,24 +5,20 @@
 #define TETROMINO_SUPERCLASS
 
 class Tetromino{
-public:
-  virtual char blockLetter();
-  virtual int** getShape(); // returns a pointer to an int[][]
-  int startPosition;
-  char* colour;
 
-  Tetromino();
-  virtual ~Tetromino();
+    public:
+        virtual char blockLetter();
+        virtual int** getShape(); // returns a pointer to an int[][]
+        int startPosition;
+        char* colour;
 
-protected:
-  int offset;
+        Tetromino();
+        virtual ~Tetromino();
 
-private:
+    protected:
+        int offset;
+
+    private:
 };
 
 #endif
-
-
-
-
-

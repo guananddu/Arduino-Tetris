@@ -1,6 +1,6 @@
 // I-shaped tetromino
 // 2014 Christopher Claoue-Long
-// refer to Z tetromino for code info/comments
+
 #ifndef TETROMINO_I_TETROMINO // prevents errors from including it multiple times
 #define TETROMINO_I_TETROMINO
 
@@ -32,16 +32,11 @@ class I_Tetromino : public Tetromino{
     private:
 
         static int i0[4][2];
-	static int i1[4][2];
-	static int i2[4][2];
-	static int i3[4][2];
+        static int i1[4][2];
+        static int i2[4][2];
+        static int i3[4][2];
         int** shape;
-
-
 
 };
 
 #endif
-
-
-

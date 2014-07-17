@@ -1,8 +1,8 @@
 // Tetromino Factory Header
 // 2014 Abbie Wade
 
-#ifndef MINOFACTORY
-#define MINOFACTORY
+#ifndef MINOFACTORY_HEADER
+#define MINOFACTORY_HEADER
 
 #include <StandardCplusplus.h>
 #include <serstream>
@@ -32,18 +32,14 @@ class MinoFactory{
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
     protected:
         Tetromino generatedPieces[7];
-        
+
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
     private:
-        
+
 	int counter;
     void shuffleIntArray();
 	int generation[7];
 
-
 };
 
 #endif
-
-
-

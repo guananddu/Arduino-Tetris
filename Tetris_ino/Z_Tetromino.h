@@ -19,7 +19,6 @@ class Z_Tetromino : public Tetromino{
         }
 
     ///////////////////////// CONSTRUCTOR //////////////////////////////////////
-
     Z_Tetromino(){
         startPosition = 3;
         shape = (int**) z0;
@@ -31,19 +30,13 @@ class Z_Tetromino : public Tetromino{
 
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
     private:
-		/*these define shapes of the tetromino*/
+        /*these define shapes of the tetromino*/
         static int z0[4][2];
-		static int z1[4][2];
-		static int z2[4][2];
-		static int z3[4][2];
+        static int z1[4][2];
+        static int z2[4][2];
+        static int z3[4][2];
         int** shape;
-
-
 
 };
 
-
 #endif
-
-
-

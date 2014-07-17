@@ -31,17 +31,12 @@ class S_Tetromino : public Tetromino{
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
     private:
 
-    int** shape;
+        int** shape;
         static int s0[4][2];
-		static int s1[4][2];
-		static int s2[4][2];
-		static int s3[4][2];
-
-
+        static int s1[4][2];
+        static int s2[4][2];
+        static int s3[4][2];
 
 };
 
 #endif
-
-
-

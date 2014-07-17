@@ -1,6 +1,6 @@
 // L-shaped tetromino
 // 2014 Christopher Claoue-Long
-// refer to Z tetromino for code info/comments
+
 #ifndef TETROMINO_L_TETROMINO // prevents errors from including it multiple times
 #define TETROMINO_L_TETROMINO
 
@@ -32,17 +32,11 @@ class L_Tetromino : public Tetromino{
     private:
 
         static int l0[4][2];
-		static int l1[4][2];
-		static int l2[4][2];
-		static int l3[4][2];
+        static int l1[4][2];
+        static int l2[4][2];
+        static int l3[4][2];
         int** shape;
-
-
 
 };
 
-
 #endif
-
-
-

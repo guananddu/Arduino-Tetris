@@ -1,7 +1,6 @@
 // T-shaped tetromino
 // 2014 Christopher Claoue-Long
 // refer to Z tetromino for code info/comments
-
 #ifndef TETROMINO_T_TETROMINO // prevents errors from including it multiple times
 #define TETROMINO_T_TETROMINO
 
@@ -24,7 +23,6 @@ class T_Tetromino : public Tetromino{
         startPosition = 3;
         shape = (int**) t0;
         colour = "purple";
-
     }
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
     protected:
@@ -33,16 +31,12 @@ class T_Tetromino : public Tetromino{
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
     private:
 
-                static int t0[4][2];
-		static int t1[4][2];
-		static int t2[4][2];
-		static int t3[4][2];
-                int** shape;
-
-
+        static int t0[4][2];
+        static int t1[4][2];
+        static int t2[4][2];
+        static int t3[4][2];
+        int** shape;
 
 };
 
 #endif
-
-

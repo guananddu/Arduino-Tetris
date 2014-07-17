@@ -32,17 +32,11 @@ class J_Tetromino : public Tetromino{
     private:
 
         static int j0[4][2];
-		static int j1[4][2];
-		static int j2[4][2];
-		static int j3[4][2];
+        static int j1[4][2];
+        static int j2[4][2];
+        static int j3[4][2];
         int** shape;
-
-
 
 };
 
-
 #endif
-
-
-

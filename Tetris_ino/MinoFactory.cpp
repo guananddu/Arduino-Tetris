@@ -1,5 +1,5 @@
 // Tetromino Factory Class Functions
-// 2014 Abbie Wade
+// 2014 Abbie Wade and Jack Carey
 
 #include "MinoFactory.h"
 #include <StandardCplusplus.h>
@@ -24,15 +24,15 @@ Tetromino* MinoFactory::newPiece(){
         case 4: return new Z_Tetromino();
         case 5: return new T_Tetromino();
         case 6: return new O_Tetromino();
-        default: break;  
+        default: break;
     }
-    
+
 }
 
 void MinoFactory::shuffleIntArray(){
     random_shuffle(&generation[0],&generation[6]);
 //    vector<int> randomiser(generation, generation+7);
-//    random_shuffle(randomiser.begin(), randomiser.end()); 
+//    random_shuffle(randomiser.begin(), randomiser.end());
 //    int i = 0;
 //    for (vector<int>::const_iterator it = randomiser.begin(); it != randomiser.end(); ++it ){
 //    	generation[i] = it;
