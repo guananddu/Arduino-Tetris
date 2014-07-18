@@ -91,19 +91,18 @@ bool Controller::hasLanded(int** blocks) {
 
 void Controller::prepInterrupts(){
     
-      // Set up the timer
-    noInterrupts();
-    TCCR1A = 0;
-    TCCR1B = 0;
-    TCNT1 = 0;
-
-    OCR1A = 31250;
-    TCCR1B |= (1 << WGM12);
-    TCCR1B |= (1 << CS12);
-    TIMSK1 |= (1 << OCR1A);
-    interrupts();
     
 
    
+}
+
+void Controller::printBoard(){
+   int i,j;
+   for(i = 0; i < 20; i++){
+     for(j = 0; j < 10; j++){
+         Serial.print(deadBlockArray[j][i]);
+     }
+     Serial.println();
+   }
 }
 
