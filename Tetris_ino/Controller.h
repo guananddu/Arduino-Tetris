@@ -4,6 +4,7 @@
 #ifndef CONTROLLER_HEADER // prevents errors from including it multiple times
 #define CONTROLLER_HEADER
 
+#include <Arduino.h>
 #include "TETROMINOES.h"
 #include "MinoFactory.h"
 
@@ -20,9 +21,11 @@ class Controller {
     ///////////////////////// PUBLIC ATTRIBUTES ////////////////////////////////
     public:
         void movePiece(char letter);
+        
 
     ///////////////////////// CONSTRUCTOR //////////////////////////////////////
     Controller(){
+        prepInterrupts();
         gameOver = false;
         pieceGen = new MinoFactory();
         reset(); // reset all the items back to original values
@@ -54,6 +57,9 @@ class Controller {
         bool checkBelow(int** blocks);
         bool checkRight(int** blocks);
         bool checkLeft(int** blocks);
+        void prepInterrupts();
+        
+        
 
 
 

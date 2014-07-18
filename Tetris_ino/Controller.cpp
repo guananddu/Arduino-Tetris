@@ -3,6 +3,7 @@
 
 #include "Controller.h"
 
+
 // This method controls the movement of a piece. This method is called by another .ccp file when it is time to move the piece down to the next row.
 //      It first checks if a piece has landed.
 //  If this is the case, it places the piece and gets a new piece.
@@ -85,5 +86,24 @@ void Controller::placePiece(int** blocks) {
 //  * This method checks if a piece has landed, and returns the appropriate boolean. (CLUE: Use belowTopRow)
 bool Controller::hasLanded(int** blocks) {
     return (!checkBelow(blocks));
+}
+
+
+void Controller::prepInterrupts(){
+    
+      // Set up the timer
+    noInterrupts();
+    TCCR1A = 0;
+    TCCR1B = 0;
+    TCNT1 = 0;
+
+    OCR1A = 31250;
+    TCCR1B |= (1 << WGM12);
+    TCCR1B |= (1 << CS12);
+    TIMSK1 |= (1 << OCR1A);
+    interrupts();
+    
+
+   
 }
 

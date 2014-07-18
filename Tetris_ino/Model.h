@@ -1,28 +1,35 @@
 // View (UI) header
-// 2014 Chris Claoue-Long
+// 2014 Jack Carey
 
-#include "Model.h"
+#ifndef MODEL
+#define MODEL
 
-class View{
+class Model{
 
     ///////////////////////// PUBLIC ATTRIBUTES ////////////////////////////////
     public:
-      View(){
-         model = new Model();
+      Model(){
+         int i,j;
+         for(i = 0; i < 20; i++){
+           for(j = 0; j < 10; j++){
+               gameBoard[j][i] = '.';
+           }
+         }
       }
-      void printBoard();
+      char gameBoard[10][20];      
+
 
 
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
     protected:
-      Model* model;
+
 
 
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
     private:
-
+    static char emptyBoard[10][20];
 
 };
 
 
-
+#endif

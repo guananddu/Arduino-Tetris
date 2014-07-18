@@ -1,6 +1,18 @@
 // View Class functions
 // 2014 Chris Claoue-Long
 
+#include <Arduino.h>
+#include "View.h"
+
+void View::printBoard(){
+   int i,j;
+   for(i = 0; i < 20; i++){
+     for(j = 0; j < 10; j++){
+         Serial.print(model->gameBoard[j][i]);
+     }
+     Serial.println();
+   }
+}
 
 
 //  * This method here was how i tested my entire code. This is my test method. It was way more beneficial to me to see what the controller saw the
