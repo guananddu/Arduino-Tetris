@@ -18,12 +18,26 @@ class Z_Tetromino : public Tetromino{
             return shape;
         }
 
-    ///////////////////////// CONSTRUCTOR //////////////////////////////////////
+    ///////////////////////// CONSTRUCTOR/DESTRUCTOR ///////////////////////////
     Z_Tetromino(){
+
+        #ifdef DEBUG
+        Serial.println("Constructing new Z_Tetromino");
+        #endif
+
         startPosition = 3;
         shape = (int**) z0;
         colour = "red";
     }
+
+    ~Z_Tetromino(){
+
+        #ifdef DEBUG
+        Serial.println("Destroying Z_Tetromino");
+        #endif
+
+    }
+
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
     protected:
 
@@ -40,3 +54,5 @@ class Z_Tetromino : public Tetromino{
 };
 
 #endif
+
+

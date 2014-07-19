@@ -10,17 +10,17 @@
 //  If the piece hasn't landed it checks the move is legal and if it is places the piece.
 
 void Controller::movePiece(char letter) {  //just worrying about gravity (moving down for the moment)
-    int** blocks = currPiece->getShape();
-    if (hasLanded(blocks)){
-        placePiece(blocks);
-        currPiece = pieceGen->newPiece();
-        topCoord = currPiece->startPosition;
-    }
-    else{
-        if (isLegal(blocks)){
-            topCoord += 10;
-        }
-    }
+//    int** blocks = model->getShape();
+//    if (hasLanded(blocks)){
+//        placePiece(blocks);
+//        currPiece = pieceGen->newPiece();
+//        topCoord = currPiece->startPosition;
+//    }
+//    else{
+//        if (isLegal(blocks)){
+//            topCoord += 10;
+//        }
+//    }
 }
 
 
@@ -76,33 +76,11 @@ void Controller::reset() {
         //get new piece
 }
 
-//  This method spawns a piece when required.
-void Controller::placePiece(int** blocks) {
-    for (i=0; i<4; i++){
-        deadBlockArray[(blocks[i][0] + (topCoord/10))][(blocks[i][1] + (topCoord%10))] = currPiece->colour;
-        }
-}
-
 //  * This method checks if a piece has landed, and returns the appropriate boolean. (CLUE: Use belowTopRow)
 bool Controller::hasLanded(int** blocks) {
     return (!checkBelow(blocks));
 }
 
 
-void Controller::prepInterrupts(){
-    
-    
 
-   
-}
-
-void Controller::printBoard(){
-   int i,j;
-   for(i = 0; i < 20; i++){
-     for(j = 0; j < 10; j++){
-         Serial.print(deadBlockArray[j][i]);
-     }
-     Serial.println();
-   }
-}
 

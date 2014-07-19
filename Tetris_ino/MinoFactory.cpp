@@ -12,11 +12,12 @@ using namespace std;
 
 //  This method is called by controller to get a new piece when I need one.
 Tetromino* MinoFactory::newPiece(){
+    counter++;
     if(counter >= 7) { // finished up all the pieces!
     	counter = 0;
     	shuffleIntArray(); // now have a new generation of pieces
     }
-    switch(generation[counter-1]){
+    switch(generation[counter]){
         case 0: return new I_Tetromino();
         case 1: return new J_Tetromino();
         case 2: return new L_Tetromino();
@@ -39,6 +40,8 @@ void MinoFactory::shuffleIntArray(){
 //    	i++;
 //    }
 }
+
+
 
 
 

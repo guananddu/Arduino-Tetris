@@ -12,8 +12,9 @@ class Tetromino{
         int startPosition;
         char* colour;
 
+        // Constructor and destructor
         Tetromino();
-        virtual ~Tetromino();
+        virtual ~Tetromino(); // Virtual so it gets called after destroying all subclass attributes
 
     protected:
         int offset;
@@ -22,3 +23,5 @@ class Tetromino{
 };
 
 #endif
+
+

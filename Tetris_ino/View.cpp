@@ -23,3 +23,14 @@
 
 
 
+void View::printBoard(){
+   int i,j;
+   for(i = 0; i < ROWS; i++){
+     for(j = 0; j < COLS; j++){
+         Serial.print(model->board[i][j]);
+     }
+     Serial.println();
+   }
+}
+
+

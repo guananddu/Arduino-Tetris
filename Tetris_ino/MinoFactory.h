@@ -16,22 +16,34 @@ class MinoFactory{
 
     ///////////////////////// PUBLIC ATTRIBUTES ////////////////////////////////
     public:
-        Tetromino* newPiece(); //defins a new functioin that will return a tetromino
+        Tetromino* newPiece(); // will return a tetromino subclass
 
-    ///////////////////////// CONSTRUCTOR //////////////////////////////////////
-    MinoFactory(){
-        counter = 0;
-        int i;
-        for (i = 0; i < 7; i++){
-            generation[i] = i;
+    ///////////////////////// CONSTRUCTOR/DESTRUCTOR ///////////////////////////
+        MinoFactory(){
+
+            #ifdef DEBUG
+            Serial.println("Constructing new MinoFactory");
+            #endif
+
+            counter = 0;
+            // Initialise the generation array for reshuffling each time
+            int i;
+            for (i = 0; i < 7; i++){
+                generation[i] = i;
+            }
+            shuffleIntArray();
+        };
+
+        ~MinoFactory(){
+
+            #ifdef DEBUG
+            Serial.println("Destroying MinoFactory");
+            #endif
+
         }
-        shuffleIntArray();
-    };
-
 
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
     protected:
-        Tetromino generatedPieces[7];
 
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
     private:
@@ -43,3 +55,5 @@ class MinoFactory{
 };
 
 #endif
+
+

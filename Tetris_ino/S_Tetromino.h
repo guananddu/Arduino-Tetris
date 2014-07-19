@@ -18,11 +18,24 @@ class S_Tetromino : public Tetromino{
             return shape;
         }
 
-    ///////////////////////// CONSTRUCTOR //////////////////////////////////////
+    ///////////////////////// CONSTRUCTOR/DESTRUCTOR ///////////////////////////
     S_Tetromino(){
+
+        #ifdef DEBUG
+        Serial.println("Constructing new S_Tetromino");
+        #endif
+
         startPosition = 3;
         shape = (int**) s0;
         colour = "green";
+    }
+
+    ~S_Tetromino(){
+
+        #ifdef DEBUG
+        Serial.println("Destroying S_Tetromino");
+        #endif
+
     }
     ///////////////////////// PROTECTED ATTRIBUTES /////////////////////////////
     protected:
@@ -40,3 +53,5 @@ class S_Tetromino : public Tetromino{
 };
 
 #endif
+
+
