@@ -4,16 +4,40 @@
 #include "Controller.h"
 
 
+// This is called every 1/60th of a second as per official Tetris guidelines
+// You need to modify this to redraw when the counter is over gravity delay OR when a button has been pressed
+// Which would signal the screen needs redrawing
+// Think about adding a volatile int that can be updated accordingly as 0 or 1 to check if a redraw is necessary
+// This volatile int will be quick and easy to set during an interrupt!
+void Controller::redraw(){
+    model->incrementCounter();
+    #ifdef DEBUG
+    #endif
+    if (model->getCounter() >= model->getGravity()){
+//        movePiece('D');
+        #ifdef DEBUG
+        Serial.println(); // Clear the screen before printing the board
+        #endif
+        view->printBoard();
+        model->resetCounter();
+    }
+}
+
 // This method controls the movement of a piece. This method is called by another .ccp file when it is time to move the piece down to the next row.
 //      It first checks if a piece has landed.
 //  If this is the case, it places the piece and gets a new piece.
 //  If the piece hasn't landed it checks the move is legal and if it is places the piece.
 
 void Controller::movePiece(char letter) {  //just worrying about gravity (moving down for the moment)
+
+    #ifdef DEBUG
+    Serial.println("Controller moving piece DOWN");
+    #endif
+    
 //    int** blocks = model->getShape();
 //    if (hasLanded(blocks)){
-//        placePiece(blocks);
-//        currPiece = pieceGen->newPiece();
+//        model->placePiece();
+//        currPiece = model->newPiece();
 //        topCoord = currPiece->startPosition;
 //    }
 //    else{

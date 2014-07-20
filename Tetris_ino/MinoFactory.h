@@ -4,6 +4,9 @@
 #ifndef MINOFACTORY_HEADER
 #define MINOFACTORY_HEADER
 
+// Comment this out to stop DEBUG over serial
+#define DEBUG
+
 #include <StandardCplusplus.h>
 #include <serstream>
 #include <string>
@@ -48,9 +51,9 @@ class MinoFactory{
     ///////////////////////// PRIVATE ATTRIBUTES ///////////////////////////////
     private:
 
-	int counter;
-    void shuffleIntArray();
-	int generation[7];
+        int counter;
+        void shuffleIntArray();
+        int generation[7];
 
 };
 

@@ -4,6 +4,9 @@
 #ifndef CONTROLLER_HEADER // prevents errors from including it multiple times
 #define CONTROLLER_HEADER
 
+// Comment this out to stop DEBUG over serial
+#define DEBUG
+
 #include <Arduino.h>
 #include "Model.h"
 #include "View.h"
@@ -21,7 +24,7 @@ class Controller {
     ///////////////////////// PUBLIC ATTRIBUTES ////////////////////////////////
     public:
         void movePiece(char letter);
-        void printBoard();
+        void redraw();
 
 
     ///////////////////////// CONSTRUCTOR/DESTRUCTOR ///////////////////////////

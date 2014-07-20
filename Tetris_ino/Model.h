@@ -4,6 +4,9 @@
 #ifndef MODEL
 #define MODEL
 
+// Comment this out to stop DEBUG over serial
+#define DEBUG
+
 #include "TETROMINOES.h"
 #include "MinoFactory.h"
 
@@ -22,6 +25,17 @@ class Model{
         void movePiece(char direction); // move the current piece's coordinates
         void updateBoard();             // update the board for the View
         void placePiece();              // place the current piece into the dead blocks
+        
+        void incrementCounter(){ 
+            counter++;
+            #ifdef DEBUG
+            Serial.print(counter);
+            #endif
+        };
+        int getCounter(){ return counter; };
+        void resetCounter(){ counter = 0; };
+        int getGravity(){return gravity; };
+        void fasterGravity(){}; // TODO
 
 
     ///////////////////////// CONSTRUCTOR/DESTRUCTOR ///////////////////////////
@@ -32,7 +46,19 @@ class Model{
             #endif
 
             pieceGenerator = new MinoFactory();
-            // When constructing a new Model(), initialise pieceGenerator and other stuff here!
+            
+            // Initialise the blank board
+            int i, j;
+            for(i = 0; i < ROWS; i++){
+                for(j = 0; j < COLS; j++){
+                    board[i][j]='.';
+                }
+            }
+            
+            currentPiece = pieceGenerator->newPiece();
+            gravity = 60; // 1 second gravity delay to begin with
+            counter = 0;
+
         }
 
         ~Model(){
@@ -55,9 +81,12 @@ class Model{
     private:
 
         MinoFactory* pieceGenerator;
-        Tetromino currentPiece;
+        Tetromino* currentPiece;         // Holds its current coordinates internally
 
         char deadPieces[ROWS][COLS];    // all the "placed" blocks that can never move again
+        
+        volatile int gravity;
+        volatile int counter;
 
 };
 

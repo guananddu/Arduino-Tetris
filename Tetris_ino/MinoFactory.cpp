@@ -2,11 +2,6 @@
 // 2014 Abbie Wade and Jack Carey
 
 #include "MinoFactory.h"
-#include <StandardCplusplus.h>
-#include <serstream>
-#include <string>
-#include <vector>
-#include <iterator>
 
 using namespace std;
 
