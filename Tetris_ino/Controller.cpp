@@ -3,6 +3,8 @@
 
 #include "Controller.h"
 
+//Is there a varible to see the shape (not letter) of current piece?
+
 
 // This is called every 1/60th of a second as per official Tetris guidelines
 // You need to modify this to redraw when the counter is over gravity delay OR when a button has been pressed
@@ -34,17 +36,17 @@ void Controller::movePiece(char letter) {  //just worrying about gravity (moving
     Serial.println("Controller moving piece DOWN");
     #endif
     
-//    int** blocks = model->getShape();
-//    if (hasLanded(blocks)){
-//        model->placePiece();
-//        currPiece = model->newPiece();
-//        topCoord = currPiece->startPosition;
-//    }
-//    else{
-//        if (isLegal(blocks)){
-//            topCoord += 10;
-//        }
-//    }
+    int** blocks = model->getShape();
+    if (hasLanded(blocks)){
+        model->placePiece();
+        currPiece = model->newPiece();
+        topCoord = currPiece->startPosition;
+    }
+    else{
+        if (isLegal(blocks)){
+            topCoord += 10;
+        }
+    }
 }
 
 
@@ -105,6 +107,12 @@ bool Controller::hasLanded(int** blocks) {
     return (!checkBelow(blocks));
 }
 
-
-
-
+void insertPiece()
+{
+  
+}
+  
+  
+  
+  
+  

@@ -73,6 +73,7 @@ class Controller {
         bool checkLeft(int** blocks);
         Model* model;
         View* view;
+        void insertPiece();
 
 
 
