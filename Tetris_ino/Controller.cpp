@@ -109,7 +109,7 @@ bool Controller::hasLanded(int** blocks) {
 
 void insertPiece()
 {
-  
+  //deadblockarray[pos of shape]=currPiece
 }
   
   
