@@ -21,11 +21,11 @@ char* tetromino_letters      = "OZIJLST.";
 // Board description -----------------------------------------------------------
 #define ROWS 22
 #define COLS 10
-char deadBlocks[ROWS][COLS]; // Dead blocks that will never move again
-char board[ROWS][COLS]; // The view combining piece and dead blocks
+int deadBlocks[ROWS][COLS]; // Dead blocks that will never move again
+int board[ROWS][COLS]; // The view combining piece and dead blocks
 byte currentPiece; // will store the index of the currently used piece
 byte currentRotation;
-char currentPieceArray[4][4];
+int currentPieceArray[4][4];
 int currentPieceRow, currentPieceCol; // Top left of piece is tracked
 
 // PIECE GENERATION AND ROTATION -----------------------------------------------
@@ -35,6 +35,28 @@ int counter = 0; // Initially choose first piece out of bag
 void shuffleBag(){
     #ifdef DEBUG
     Serial.println("Shuffling");
+    for(int i = 0; i < 7; i++){
+       Serial.print(tetromino_letters[pieceGenerationIndex[i]]);
+    }
+    Serial.println();
+    #endif
+
+    randomSeed(millis());
+
+    for (int i = 6; i > 0; i--){
+        int j = random(i+1);
+        byte temp = pieceGenerationIndex[j];
+        pieceGenerationIndex[j] = pieceGenerationIndex[i];
+        pieceGenerationIndex[i] = temp;
+    }
+
+    #ifdef DEBUG
+    Serial.println("Done!");
+    for(int i = 0; i < 7; i++){
+       Serial.print(tetromino_letters[pieceGenerationIndex[i]]);
+    }
+    Serial.println();
+
     #endif
 }
 
@@ -43,18 +65,83 @@ void newPiece(){
     #ifdef DEBUG
     Serial.println("NP");
     #endif
+
+    currentPieceRow = 0;
+    currentPieceCol = 3;
+
+    if (counter > 6){
+        counter = 0;
+        shuffleBag();
+    }
+
+    switch(pieceGenerationIndex[counter]){
+        case 0:
+            currentPiece = currentRotation = pieceIndex[0];
+            break;
+        case 1:
+            currentPiece = currentRotation = pieceIndex[1];
+            break;
+        case 2:
+            currentPiece = currentRotation = pieceIndex[5];
+            break;
+        case 3:
+            currentPiece = currentRotation = pieceIndex[9];
+            break;
+        case 4:
+            currentPiece = currentRotation = pieceIndex[13];
+            break;
+        case 5:
+            currentPiece = currentRotation = pieceIndex[17];
+            break;
+        case 6:
+            currentPiece = currentRotation = pieceIndex[21];
+            break;
+    }
+
+    for(int i = 0; i < SHAPESIZE; i++){
+       for(int j = 0; j < SHAPESIZE; j++){
+           currentPieceArray[i][j] = tetrominoes[currentPiece][i][j];
+
+       }
+    }
+
+    counter++;
+
+
 }
 
 // Check the left boundary
-void checkLeft(){
+bool checkLeft(){
+
+    return true;
 }
 
 // Check the right boundary
-void checkRight(){
+bool checkRight(){
+
+    return true;
 }
 
-// Check below
-void checkBelow(){
+// Check below (true = fine to drop, false = can't)
+bool checkBelow(){
+    // do any blocks overlap?
+    for(int i = 0; i < ROWS; i++){
+        for(int j = 0; j < COLS; j++){
+            if (deadBlocks[i][j] != BLACK && currentPieceArray[i][j] != BLACK)
+                return false;
+        }
+    }
+
+    // does the piece fall below the board?
+    for(int i = 0; i < SHAPESIZE; i++){
+        for(int j = 0; j < SHAPESIZE; j++){
+            if (currentPieceArray[i][j] != BLACK && i+currentPieceRow+1 >= ROWS)
+                return false;
+        }
+    }
+
+    // all good!
+    return true;
 }
 
 // Rotate the piece
@@ -79,14 +166,59 @@ void initialise(){
     #ifdef DEBUG
     Serial.println("INIT");
     #endif
+
+    for(int i = 0; i < ROWS; i++){
+        for(int j = 0; j < COLS; j++){
+            deadBlocks[i][j] = 0;
+        }
+    }
+
+    counter = 0;
+    shuffleBag();
+    newPiece();
+
+
 }
 
 // place a piece into the dead block array
 void placePiece(){
+    for(int i = 0; i < SHAPESIZE; i++){
+        for(int j = 0; j < SHAPESIZE; j++){
+            if(currentPieceArray[i][j] != BLACK)
+                deadBlocks[i+currentPieceRow][j+currentPieceCol] = currentPieceArray[i][j];
+        }
+    }
 }
 
 // Move a piece
 void movePiece(int direction){
+
+    #ifdef DEBUG
+    Serial.println();
+    Serial.print("Moving piece ");
+    switch(direction){
+        case LEFT: Serial.println("LEFT"); break;
+        case RIGHT: Serial.println("RIGHT"); break;
+        case DOWN: Serial.println("DOWN"); break;
+    }
+    #endif
+
+    switch(direction){
+        case LEFT:
+            break;
+        case RIGHT:
+            break;
+        case DOWN:
+            if(checkBelow())
+                currentPieceRow++;
+            else{
+                placePiece();
+                newPiece();
+            }
+            break;
+    }
+    redraw();
+
 }
 
 // Increment the timer, and if reached gravity delay, move the piece down
@@ -94,6 +226,14 @@ void tick(){
     #ifdef DEBUG
     Serial.print("!");
     #endif
+
+    timer++;
+
+    if (timer > 60){
+        movePiece(DOWN);
+        timer = 0;
+    }
+
 }
 
 // LCD -------------------------------------------------------------------------
@@ -103,6 +243,30 @@ UTFT display(ITDB24E_8,A5,A4,A3,A2);
 
 // Redraw the screen
 void redraw(){
+    for(int i = 0; i < ROWS; i++){
+        for(int j = 0; j < COLS; j++){
+            board[i][j] = deadBlocks[i][j];
+        }
+    }
+
+    for(int i = 0; i < SHAPESIZE; i++){
+        for(int j = 0; j < SHAPESIZE; j++){
+            if(currentPieceArray[i][j] != BLACK)
+                board[i+currentPieceRow][j+currentPieceCol] = currentPieceArray[i][j];
+        }
+    }
+
+    #ifdef DEBUG
+    Serial.println();
+    for(int i = 2; i < ROWS; i++){
+        for(int j = 0; j < COLS; j++){
+            Serial.print(board[i][j]);
+        }
+        Serial.println();
+
+    }
+    #endif
+
 }
 
 
@@ -163,7 +327,6 @@ void setup(){
 // TIMER INTERRUPT SERVICE ROUTINE ---------------------------------------------
 ISR(TIMER1_COMPA_vect){
     tick();
-    redraw();
 }
 
 // LOOP ------------------------------------------------------------------------
