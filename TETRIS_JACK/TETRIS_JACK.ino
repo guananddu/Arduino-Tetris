@@ -26,7 +26,7 @@ int board[ROWS][COLS]; // The view combining piece and dead blocks
 byte currentPiece; // will store the index of the currently used piece
 byte currentRotation;
 int currentPieceArray[4][4];
-int currentPieceRow, currentPieceCol; // Top left of piece is tracked
+volatile int currentPieceRow, currentPieceCol; // Top left of piece is tracked
 
 // PIECE GENERATION AND ROTATION -----------------------------------------------
 int counter = 0; // Initially choose first piece out of bag
@@ -125,9 +125,9 @@ bool checkRight(){
 // Check below (true = fine to drop, false = can't)
 bool checkBelow(){
     // do any blocks overlap?
-    for(int i = 0; i < ROWS; i++){
-        for(int j = 0; j < COLS; j++){
-            if (deadBlocks[i][j] != BLACK && currentPieceArray[i][j] != BLACK)
+    for(int i = 0; i < SHAPESIZE; i++){
+        for(int j = 0; j < SHAPESIZE; j++){
+            if (deadBlocks[i+currentPieceRow+1][j+currentPieceCol] != BLACK && currentPieceArray[i][j] != BLACK)
                 return false;
         }
     }
@@ -173,7 +173,6 @@ void initialise(){
         }
     }
 
-    counter = 0;
     shuffleBag();
     newPiece();
 
@@ -182,6 +181,10 @@ void initialise(){
 
 // place a piece into the dead block array
 void placePiece(){
+
+    #ifdef DEBUG
+    Serial.println("Placing piece");
+    #endif
     for(int i = 0; i < SHAPESIZE; i++){
         for(int j = 0; j < SHAPESIZE; j++){
             if(currentPieceArray[i][j] != BLACK)
@@ -258,7 +261,21 @@ void redraw(){
 
     #ifdef DEBUG
     Serial.println();
-    for(int i = 2; i < ROWS; i++){
+    Serial.print("Current piece is: ");
+    switch(currentPiece){
+        case 0: Serial.println("O"); break;
+        case 1: Serial.println("Z"); break;
+        case 5: Serial.println("I"); break;
+        case 9: Serial.println("J"); break;
+        case 13: Serial.println("L"); break;
+        case 17: Serial.println("S"); break;
+        case 21: Serial.println("T"); break;
+    }
+    Serial.print("Current row is: ");
+    Serial.println(currentPieceRow);
+    Serial.print("Current column is: ");
+    Serial.println(currentPieceCol);
+    for(int i = 0; i < ROWS; i++){
         for(int j = 0; j < COLS; j++){
             Serial.print(board[i][j]);
         }
