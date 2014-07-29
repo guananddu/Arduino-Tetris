@@ -21,8 +21,8 @@ char* tetromino_letters      = "OZIJLST.";
 // Board description -----------------------------------------------------------
 #define ROWS 22
 #define COLS 10
-int deadBlocks[ROWS][COLS]; // Dead blocks that will never move again
-int board[ROWS][COLS]; // The view combining piece and dead blocks
+char deadBlocks[ROWS][COLS]; // Dead blocks that will never move again
+char board[ROWS][COLS]; // The view combining piece and dead blocks
 byte currentPiece; // will store the index of the currently used piece
 byte currentRotation;
 int currentPieceArray[4][4];
@@ -112,13 +112,45 @@ void newPiece(){
 
 // Check the left boundary
 bool checkLeft(){
+    // do any blocks overlap?
+    for(int i = 0; i < SHAPESIZE; i++){
+        for(int j = 0; j < SHAPESIZE; j++){
+            if (deadBlocks[currentPieceRow+i][j+currentPieceCol-1] != BLACK && currentPieceArray[i][j] != BLACK)
+                return false;
+        }
+    }
 
+    // does the piece go too far left?
+    for(int i = 0; i < SHAPESIZE; i++){
+        for(int j = 0; j < SHAPESIZE; j++){
+            if (currentPieceArray[i][j] != BLACK && j+currentPieceCol-1 < 0)
+                return false;
+        }
+    }
+
+    // all good!
     return true;
 }
 
 // Check the right boundary
 bool checkRight(){
+    // do any blocks overlap?
+    for(int i = 0; i < SHAPESIZE; i++){
+        for(int j = 0; j < SHAPESIZE; j++){
+            if (deadBlocks[currentPieceRow+i][j+currentPieceCol+1] != BLACK && currentPieceArray[i][j] != BLACK)
+                return false;
+        }
+    }
 
+    // does the piece go too far right?
+    for(int i = 0; i < SHAPESIZE; i++){
+        for(int j = 0; j < SHAPESIZE; j++){
+            if (currentPieceArray[i][j] != BLACK && j+currentPieceCol+1 >= COLS)
+                return false;
+        }
+    }
+
+    // all good!
     return true;
 }
 
@@ -127,7 +159,7 @@ bool checkBelow(){
     // do any blocks overlap?
     for(int i = 0; i < SHAPESIZE; i++){
         for(int j = 0; j < SHAPESIZE; j++){
-            if (deadBlocks[i+currentPieceRow+1][j+currentPieceCol] != BLACK && currentPieceArray[i][j] != BLACK)
+            if (deadBlocks[currentPieceRow+i+1][j+currentPieceCol] != BLACK && currentPieceArray[i][j] != BLACK)
                 return false;
         }
     }
@@ -208,6 +240,7 @@ void movePiece(int direction){
 
     switch(direction){
         case LEFT:
+        
             break;
         case RIGHT:
             break;
@@ -220,7 +253,6 @@ void movePiece(int direction){
             }
             break;
     }
-    redraw();
 
 }
 
@@ -344,6 +376,7 @@ void setup(){
 // TIMER INTERRUPT SERVICE ROUTINE ---------------------------------------------
 ISR(TIMER1_COMPA_vect){
     tick();
+    redraw();
 }
 
 // LOOP ------------------------------------------------------------------------
