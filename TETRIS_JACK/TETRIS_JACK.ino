@@ -15,8 +15,10 @@ char tetrominoes[25][4][4]   = {O1, Z1,Z2,Z3,Z4, I1,I2,I3,I4, J1,J2,J3,J4, L1,L2
 byte pieceIndex[25]          = {0,  1, 2, 3, 4,  5, 6, 7, 8,  9, 10,11,12, 13,14,15,16, 17,18,19,20, 21,22,23,24};
 // Piece generation list (randomly shuffled for each bag)
 byte pieceGenerationIndex[7] = {0,  1,           2,           3,           4,           5,           6,          };
-// Letters to use when debugging
-char* tetromino_letters      = "OZIJLST.";
+char* tetromino_letters      = ".ZIJLOST"; // Pieces printed over serial according to their colour
+#ifdef DEBUG
+char* tetrominoDebug         = "OZIJLST";
+#endif
 
 // Board description -----------------------------------------------------------
 #define ROWS 22
@@ -36,7 +38,7 @@ void shuffleBag(){
     #ifdef DEBUG
     Serial.println("Shuffling");
     for(int i = 0; i < 7; i++){
-       Serial.print(tetromino_letters[pieceGenerationIndex[i]]);
+       Serial.print(tetrominoDebug[pieceGenerationIndex[i]]);
     }
     Serial.println();
     #endif
@@ -53,7 +55,7 @@ void shuffleBag(){
     #ifdef DEBUG
     Serial.println("Done!");
     for(int i = 0; i < 7; i++){
-       Serial.print(tetromino_letters[pieceGenerationIndex[i]]);
+       Serial.print(tetrominoDebug[pieceGenerationIndex[i]]);
     }
     Serial.println();
 
@@ -265,11 +267,10 @@ void movePiece(int direction){
             else{
                 placePiece();
                 newPiece();
-                redraw();
             }
             break;
     }
-
+                redraw();
 }
 
 // Increment the timer, and if reached gravity delay, move the piece down
@@ -280,7 +281,7 @@ void tick(){
 
     timer++;
 
-    if (timer > 60){
+    if (timer > gravity){
         movePiece(DOWN);
         timer = 0;
     }
@@ -325,7 +326,7 @@ void redraw(){
     Serial.println(currentPieceCol);
     for(int i = 0; i < ROWS; i++){
         for(int j = 0; j < COLS; j++){
-            Serial.print(board[i][j]);
+            Serial.print(tetromino_letters[board[i][j]]);
         }
         Serial.println();
 
