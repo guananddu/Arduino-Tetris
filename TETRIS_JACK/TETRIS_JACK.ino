@@ -240,9 +240,24 @@ void movePiece(int direction){
 
     switch(direction){
         case LEFT:
-        
+            if(checkLeft())
+                currentPieceCol--;
+            else{
+                #ifdef DEBUG
+                Serial.println("ILLEGAL (Left)");
+                #endif
+            
+
+            }
             break;
         case RIGHT:
+            if(checkRight())
+                currentPieceCol++;
+            else{
+                #ifdef DEBUG
+                Serial.println("ILLEGAL (Right)");
+                #endif
+            }
             break;
         case DOWN:
             if(checkBelow())
@@ -250,6 +265,7 @@ void movePiece(int direction){
             else{
                 placePiece();
                 newPiece();
+                redraw();
             }
             break;
     }
@@ -376,7 +392,6 @@ void setup(){
 // TIMER INTERRUPT SERVICE ROUTINE ---------------------------------------------
 ISR(TIMER1_COMPA_vect){
     tick();
-    redraw();
 }
 
 // LOOP ------------------------------------------------------------------------
