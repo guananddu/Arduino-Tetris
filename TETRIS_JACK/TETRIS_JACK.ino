@@ -324,7 +324,7 @@ void redraw(){
     Serial.println(currentPieceRow);
     Serial.print("Current column is: ");
     Serial.println(currentPieceCol);
-    for(int i = 0; i < ROWS; i++){
+    for(int i = 2; i < ROWS; i++){
         for(int j = 0; j < COLS; j++){
             Serial.print(tetromino_letters[board[i][j]]);
         }
@@ -338,10 +338,10 @@ void redraw(){
 
 // BUTTON INTERRUPTS GO HERE ---------------------------------------------------
 // Button pins
-#define downbutton   XYZ
-#define rotatebutton XYZ
-#define leftbutton   XYZ
-#define rightbutton  XYZ
+#define DBUTTON   XYZ
+#define ROTBUTTON XYZ
+#define LBUTTON   XYZ
+#define RBUTTON  9
 
 // Interrupt service routines
 void downButton(){
@@ -353,7 +353,8 @@ void rotateButton(){
 void leftButton(){
 }
 
-void rightButton(){
+ISR(PCINT1_vect){
+    movePiece(RIGHT);
 }
 
 // SETUP -----------------------------------------------------------------------
@@ -370,12 +371,18 @@ void setup(){
     display.setFont(SmallFont);
     // Initialise game
     initialise();
-    // attach interrupts (rising means they will only fire when button is first pressed)
-//    PCint::attachInterrupt(downbutton,downButton,RISING);
-//    PCint::attachInterrupt(rotatebutton,rotateButton,RISING);
-//    PCint::attachInterrupt(leftbutton,leftButton,RISING);
-//    PCint::attachInterrupt(rightbutton,rightButton,RISING);
-    // Set up the timer for 1/60th of a second
+    
+    //initilise pin 9 - see http://www.me.ucsb.edu/~me170c/Code/How_to_Enable_Interrupts_on_ANY_pin.pdf
+    //to see list of (port?) numbers.
+    PCICR |= (1<<PCIE0);
+    PCMSK0 |= (1<<PCINT1);
+    MCUCR = (1<<ISC01) | (1<<ISC01);
+
+    pinMode(RBUTTON, INPUT);
+    digitalWrite(RBUTTON, HIGH);
+
+
+
     #ifdef DEBUG
     Serial.println("Setting up timer...");
     #endif
