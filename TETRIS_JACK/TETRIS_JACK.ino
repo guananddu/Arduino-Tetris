@@ -10,8 +10,8 @@
 #define RESET 12
 #define ROTBUTTON 11
 #define DBUTTON 10
-#define LBUTTON 9
-#define RBUTTON  8
+#define LBUTTON 8
+#define RBUTTON  9
 
 #define BLOCKSIZE 12 // block size on the LCD
 
@@ -23,7 +23,7 @@ UTFT display(ITDB28,A5,A4,A3,A2);
 // Tetrominoes -----------------------------------------------------------------
 #include "tetrominoes.h" // defines Tetromino colours and matrices
 // Tetromino list
-char tetrominoes[25][4][4]   = {O1, Z1,Z2,Z3,Z4, I1,I2,I3,I4, J1,J2,J3,J4, L1,L2,L3,L4, S1,S2,S3,S4, T1,T2,T3,T4};
+char tetrominoes[25][SHAPESIZE][SHAPESIZE]   = {O1, Z1,Z2,Z3,Z4, I1,I2,I3,I4, J1,J2,J3,J4, L1,L2,L3,L4, S1,S2,S3,S4, T1,T2,T3,T4};
 // Piece index list
 byte pieceIndex[25]          = {0,  1, 2, 3, 4,  5, 6, 7, 8,  9, 10,11,12, 13,14,15,16, 17,18,19,20, 21,22,23,24};
 // Piece generation list (randomly shuffled for each bag)
@@ -200,15 +200,80 @@ bool checkBelow(){
 
 // Rotate the piece
 void rotate(){
+    
     #ifdef DEBUG
     Serial.println("ROT");
     #endif
+
+    byte newRotation;
+
+    switch(currentPiece){
+        case 0: return; //"O" Piece - no need to rotate
+        case 1:         // "Z" Piece
+            if(currentRotation < 4) newRotation = currentRotation+1;
+            else                    newRotation = 1;
+            break;
+        case 5:
+            if(currentRotation < 8) newRotation = currentRotation+1;
+            else                    newRotation = 5;
+            break;
+        case 9:
+            if(currentRotation < 12) newRotation = currentRotation+1;
+            else                    newRotation = 9;
+            break;
+        case 13:
+            if(currentRotation < 16) newRotation = currentRotation+1;
+            else                    newRotation = 13;
+            break;
+        case 17:
+            if(currentRotation < 20) newRotation = currentRotation+1;
+            else                    newRotation = 17;
+            break;
+        case 21:
+            if(currentRotation < 24) newRotation = currentRotation+1;
+            else                    newRotation = 21;
+            break;
+    }
+
+
+    // Now apply rotation and check if it worked!
+    for(int i = 0; i < SHAPESIZE; i++){
+        for(int j = 0; j < SHAPESIZE; j++){
+            currentPieceArray[i][j] = tetrominoes[newRotation][i][j];
+        }
+    }
+
+    if(!checkLeft() || !checkRight() || !checkBelow()){  //Checking if rotation overlaps or goes of the board - if true, revert.
+
+        #ifdef DEBUG
+        Serial.println("Rotate unsuccessful");
+        #endif
+
+        for(int i = 0; i < SHAPESIZE; i++){
+            for(int j = 0; j < SHAPESIZE; j++){
+                currentPieceArray[i][j] = tetrominoes[currentRotation][i][j];
+            }
+        }
+    }
+
+    else{
+
+        #ifdef DEBUG
+        Serial.println("Rotate successful");
+        #endif
+
+        currentRotation = newRotation;
+    }
+
+
 }
+
 
 // Game Logic ------------------------------------------------------------------
 #define MOVE_LEFT 0
 #define MOVE_RIGHT 1
 #define MOVE_DOWN 2
+#define MOVE_ROTATE 3
 
 volatile int timer = 0; // Tick counter, stored in RAM
 volatile int lockdelay = 0; // lock delay counter, stored in RAM
@@ -277,6 +342,7 @@ void movePiece(int direction){
         case MOVE_LEFT: Serial.println("MOVE_LEFT"); break;
         case MOVE_RIGHT: Serial.println("MOVE_RIGHT"); break;
         case MOVE_DOWN: Serial.println("MOVE_DOWN"); break;
+        case MOVE_ROTATE: Serial.println("MOVE_ROTATE"); break;
     }
     #endif
 
@@ -306,11 +372,15 @@ void movePiece(int direction){
         case MOVE_DOWN:
             if(checkBelow()){
                 currentPieceRow++;
+                timer = 0;
             }
             else{
                 placePiece();
                 newPiece();
             }
+            break;
+        case MOVE_ROTATE:
+            rotate();
             break;
     }
                 redraw();
@@ -507,6 +577,7 @@ ISR(TIMER1_COMPA_vect){
 char lastRightPress = LOW;
 char lastDownPress =  LOW;
 char lastLeftPress = LOW;
+char lastRotPress = LOW;
 
 void loop(){
     //Right button pressed
@@ -538,14 +609,26 @@ void loop(){
         if(lastDownPress == LOW){
             movePiece(MOVE_DOWN);
             lastDownPress = HIGH;
-            timer = 0;
         }
     }
 
     else{
         lastDownPress = LOW;
     }
+
+    //Rot button pressed
+    if(digitalRead(ROTBUTTON) == HIGH){
+        if(lastRotPress == LOW){
+            movePiece(MOVE_ROTATE);
+            lastRotPress = HIGH;
+        }
+    }
+
+    else{
+        lastRotPress = LOW;
+    }
 }
+
 
 
 
