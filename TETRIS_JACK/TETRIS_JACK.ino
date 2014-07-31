@@ -13,7 +13,7 @@
 #define LBUTTON 8
 #define RBUTTON  9
 
-#define BLOCKSIZE 12 // block size on the LCD
+#define BLOCKSIZE 12 // block size on the lcd
 
 #include <UTFT.h>
 extern uint8_t SmallFont[]; // TODO Declares font for LCD. Small font currently, need medium font?
