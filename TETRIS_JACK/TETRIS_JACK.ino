@@ -7,6 +7,13 @@
 // Comment to disable debugging
 #define DEBUG
 
+
+// Button pins
+#define DBUTTON   XYZ
+#define ROTBUTTON XYZ
+#define LBUTTON   XYZ
+#define RBUTTON  9
+
 // Tetrominoes -----------------------------------------------------------------
 #include "tetrominoes.h" // defines Tetromino colours and matrices
 // Tetromino list
@@ -336,27 +343,6 @@ void redraw(){
 }
 
 
-// BUTTON INTERRUPTS GO HERE ---------------------------------------------------
-// Button pins
-#define DBUTTON   XYZ
-#define ROTBUTTON XYZ
-#define LBUTTON   XYZ
-#define RBUTTON  9
-
-// Interrupt service routines
-void downButton(){
-}
-
-void rotateButton(){
-}
-
-void leftButton(){
-}
-
-ISR(PCINT1_vect){
-    movePiece(RIGHT);
-}
-
 // SETUP -----------------------------------------------------------------------
 void setup(){
 
@@ -400,6 +386,22 @@ void setup(){
 // TIMER INTERRUPT SERVICE ROUTINE ---------------------------------------------
 ISR(TIMER1_COMPA_vect){
     tick();
+}
+
+// BUTTON INTERRUPTS GO HERE ---------------------------------------------------
+
+// Interrupt service routines
+void downButton(){
+}
+
+void rotateButton(){
+}
+
+void leftButton(){
+}
+
+ISR(PCINT1_vect){
+    movePiece(RIGHT);
 }
 
 // LOOP ------------------------------------------------------------------------
