@@ -1,18 +1,24 @@
 // TETRIS by Jack Carey
 
-// External includes
-#include <Arduino.h>
-#include <PinChangeInt.h>
-
 // Comment to disable debugging
-#define DEBUG
+//#define DEBUG
+
+
 
 
 // Button pins
-#define DBUTTON   XYZ
-#define ROTBUTTON XYZ
-#define LBUTTON   XYZ
-#define RBUTTON  9
+#define RESET 12
+#define ROTBUTTON 11
+#define DBUTTON 10
+#define LBUTTON 9
+#define RBUTTON  8
+
+#define BLOCKSIZE 12 // block size on the LCD
+
+#include <UTFT.h>
+extern uint8_t SmallFont[]; // TODO Declares font for LCD. Small font currently, need medium font?
+UTFT display(ITDB28,A5,A4,A3,A2);
+
 
 // Tetrominoes -----------------------------------------------------------------
 #include "tetrominoes.h" // defines Tetromino colours and matrices
@@ -22,16 +28,23 @@ char tetrominoes[25][4][4]   = {O1, Z1,Z2,Z3,Z4, I1,I2,I3,I4, J1,J2,J3,J4, L1,L2
 byte pieceIndex[25]          = {0,  1, 2, 3, 4,  5, 6, 7, 8,  9, 10,11,12, 13,14,15,16, 17,18,19,20, 21,22,23,24};
 // Piece generation list (randomly shuffled for each bag)
 byte pieceGenerationIndex[7] = {0,  1,           2,           3,           4,           5,           6,          };
-char* tetromino_letters      = ".ZIJLOST"; // Pieces printed over serial according to their colour
+
+
+
 #ifdef DEBUG
+char* tetromino_letters      = ".ZIJLOST"; // Pieces printed over serial according to their colour
 char* tetrominoDebug         = "OZIJLST";
 #endif
+
+
+
 
 // Board description -----------------------------------------------------------
 #define ROWS 22
 #define COLS 10
 char deadBlocks[ROWS][COLS]; // Dead blocks that will never move again
 char board[ROWS][COLS]; // The view combining piece and dead blocks
+char oldBoard[ROWS][COLS]; // The previous frame
 byte currentPiece; // will store the index of the currently used piece
 byte currentRotation;
 int currentPieceArray[4][4];
@@ -193,9 +206,9 @@ void rotate(){
 }
 
 // Game Logic ------------------------------------------------------------------
-#define LEFT 0
-#define RIGHT 1
-#define DOWN 2
+#define MOVE_LEFT 0
+#define MOVE_RIGHT 1
+#define MOVE_DOWN 2
 
 volatile int timer = 0; // Tick counter, stored in RAM
 volatile int lockdelay = 0; // lock delay counter, stored in RAM
@@ -207,6 +220,26 @@ void initialise(){
     #ifdef DEBUG
     Serial.println("INIT");
     #endif
+
+    int x1, x2, y1, y2;
+    for(int i = 2; i < ROWS; i++){ // top 2 rows are hidden!
+        for(int j = 0; j < COLS; j++){
+            x1 = BLOCKSIZE*j + j;
+            x2 = x1 + BLOCKSIZE;
+            y1 = BLOCKSIZE*i + i;
+            y2 = y1 + BLOCKSIZE;
+            // draw the outline
+            display.setColor(VGA_SILVER);
+            display.drawRect(x1,y1,x2,y2); // draw a grey blank square
+        }
+    }
+
+
+    pinMode(LBUTTON,INPUT);
+    pinMode(RBUTTON,INPUT);
+    pinMode(DBUTTON,INPUT);
+    pinMode(RESET,INPUT);
+    pinMode(ROTBUTTON,INPUT);
 
     for(int i = 0; i < ROWS; i++){
         for(int j = 0; j < COLS; j++){
@@ -241,16 +274,17 @@ void movePiece(int direction){
     Serial.println();
     Serial.print("Moving piece ");
     switch(direction){
-        case LEFT: Serial.println("LEFT"); break;
-        case RIGHT: Serial.println("RIGHT"); break;
-        case DOWN: Serial.println("DOWN"); break;
+        case MOVE_LEFT: Serial.println("MOVE_LEFT"); break;
+        case MOVE_RIGHT: Serial.println("MOVE_RIGHT"); break;
+        case MOVE_DOWN: Serial.println("MOVE_DOWN"); break;
     }
     #endif
 
     switch(direction){
-        case LEFT:
-            if(checkLeft())
+        case MOVE_LEFT:
+            if(checkLeft()){
                 currentPieceCol--;
+            }
             else{
                 #ifdef DEBUG
                 Serial.println("ILLEGAL (Left)");
@@ -259,18 +293,20 @@ void movePiece(int direction){
 
             }
             break;
-        case RIGHT:
-            if(checkRight())
+        case MOVE_RIGHT:
+            if(checkRight()){
                 currentPieceCol++;
+            }
             else{
                 #ifdef DEBUG
                 Serial.println("ILLEGAL (Right)");
                 #endif
             }
             break;
-        case DOWN:
-            if(checkBelow())
+        case MOVE_DOWN:
+            if(checkBelow()){
                 currentPieceRow++;
+            }
             else{
                 placePiece();
                 newPiece();
@@ -289,19 +325,30 @@ void tick(){
     timer++;
 
     if (timer > gravity){
-        movePiece(DOWN);
+        movePiece(MOVE_DOWN);
         timer = 0;
     }
 
 }
 
 // LCD -------------------------------------------------------------------------
-#include <UTFT.h>
-extern uint8_t SmallFont[]; // TODO Declares font for LCD. Small font currently, need medium font?
-UTFT display(ITDB24E_8,A5,A4,A3,A2);
+
+
+
+
+
 
 // Redraw the screen
 void redraw(){
+
+    //make the oldBoard = board.
+    for(int i = 0; i < ROWS; i++){
+        for(int j = 0; j < COLS; j++){
+            oldBoard[i][j] = board[i][j];
+        }
+    }
+
+    // update the board
     for(int i = 0; i < ROWS; i++){
         for(int j = 0; j < COLS; j++){
             board[i][j] = deadBlocks[i][j];
@@ -314,6 +361,9 @@ void redraw(){
                 board[i+currentPieceRow][j+currentPieceCol] = currentPieceArray[i][j];
         }
     }
+
+    
+
 
     #ifdef DEBUG
     Serial.println();
@@ -340,6 +390,53 @@ void redraw(){
     }
     #endif
 
+
+
+
+
+
+
+    // draw to the LCD
+    int x1, x2, y1, y2;
+    for(int i = 2; i < ROWS; i++){ // top 2 rows are hidden!
+        for(int j = 0; j < COLS; j++){
+
+            if(oldBoard[i][j] != board[i][j]){  //only update lcd if something changed from oldBoard (last frame)
+                x1 = BLOCKSIZE*j + j;
+                x2 = x1 + BLOCKSIZE;
+                y1 = BLOCKSIZE*i + i;
+                y2 = y1 + BLOCKSIZE;
+
+
+                // dumb way to begin with (constantly refreshing EVERYTHING!!!)
+                if(board[i][j] == BLACK){
+                    // clear the block
+                    display.setColor(VGA_BLACK);
+                    display.fillRect(x1, y1, x2, y2);
+                    
+                    // draw the outline
+                    display.setColor(VGA_SILVER);
+                    display.drawRect(x1,y1,x2,y2); // draw a grey blank square
+                }
+                else{
+                    switch(board[i][j]){
+                        case RED: display.setColor(VGA_RED); break;
+                        case CYAN: display.setColor(VGA_AQUA); break;
+                        case BLUE: display.setColor(VGA_BLUE); break;
+                        case ORANGE: display.setColor(255, 165, 0); break;
+                        case YELLOW: display.setColor(VGA_YELLOW); break;
+                        case GREEN: display.setColor(VGA_LIME); break;
+                        case PURPLE: display.setColor(VGA_FUCHSIA); break;
+                    }
+                    
+
+                    display.fillRect(x1,y1,x2,y2); // draw a filled square of the right colour
+                }
+
+            }
+        }
+    }
+
 }
 
 
@@ -353,19 +450,21 @@ void setup(){
     #endif
 
     // Start the LCD
-    display.InitLCD();
-    display.setFont(SmallFont);
+    display.InitLCD(0); // Set as portrait mode
+    display.setFont(SmallFont); // Use small font for scores (if any at all!)
+    display.clrScr();
+    display.setBackColor(VGA_BLACK);
+
     // Initialise game
     initialise();
     
     //initilise pin 9 - see http://www.me.ucsb.edu/~me170c/Code/How_to_Enable_Interrupts_on_ANY_pin.pdf
     //to see list of (port?) numbers.
-    PCICR |= (1<<PCIE0);
-    PCMSK0 |= (1<<PCINT1);
-    MCUCR = (1<<ISC01) | (1<<ISC01);
+    // PCICR |= (1<<PCIE0);
+    // PCMSK0 |= (1<<PCINT1);
+    // MCUCR = (1<<ISC00) | (1<<ISC00);
 
-    pinMode(RBUTTON, INPUT);
-    digitalWrite(RBUTTON, HIGH);
+    // pinMode(RBUTTON, INPUT);
 
 
 
@@ -391,20 +490,70 @@ ISR(TIMER1_COMPA_vect){
 // BUTTON INTERRUPTS GO HERE ---------------------------------------------------
 
 // Interrupt service routines
-void downButton(){
-}
+// void downButton(){
+// }
 
-void rotateButton(){
-}
+// void rotateButton(){
+// }
 
-void leftButton(){
-}
+// void leftButton(){
+// }
 
-ISR(PCINT1_vect){
-    movePiece(RIGHT);
-}
+// ISR(PCINT1_vect){
+//     movePiece(MOVE_RIGHT);
+// }
 
 // LOOP ------------------------------------------------------------------------
+char lastRightPress = LOW;
+char lastDownPress =  LOW;
+char lastLeftPress = LOW;
+
 void loop(){
-    // All interrupt based, nothing to see here! (until music)
+    //Right button pressed
+    if(digitalRead(RBUTTON) == HIGH){
+        if(lastRightPress == LOW){
+            movePiece(MOVE_RIGHT);
+            lastRightPress = HIGH;
+        }
+    }
+
+    else{
+        lastRightPress = LOW;
+    }
+
+    //Left button pressed
+    if(digitalRead(LBUTTON) == HIGH){
+        if(lastLeftPress == LOW){
+            movePiece(MOVE_LEFT);
+            lastLeftPress = HIGH;
+        }
+    }
+
+    else{
+        lastLeftPress = LOW;
+    }
+    
+    //Down button pressed
+    if(digitalRead(DBUTTON) == HIGH){
+        if(lastDownPress == LOW){
+            movePiece(MOVE_DOWN);
+            lastDownPress = HIGH;
+            timer = 0;
+        }
+    }
+
+    else{
+        lastDownPress = LOW;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
