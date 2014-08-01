@@ -25,9 +25,9 @@ UTFT display(ITDB28,A5,A4,A3,A2);
 // Tetromino list
 char tetrominoes[25][SHAPESIZE][SHAPESIZE]   = {O1, Z1,Z2,Z3,Z4, I1,I2,I3,I4, J1,J2,J3,J4, L1,L2,L3,L4, S1,S2,S3,S4, T1,T2,T3,T4};
 // Piece index list
-byte pieceIndex[25]          = {0,  1, 2, 3, 4,  5, 6, 7, 8,  9, 10,11,12, 13,14,15,16, 17,18,19,20, 21,22,23,24};
+byte pieceIndex[25]                          = {0,  1, 2, 3, 4,  5, 6, 7, 8,  9, 10,11,12, 13,14,15,16, 17,18,19,20, 21,22,23,24};
 // Piece generation list (randomly shuffled for each bag)
-byte pieceGenerationIndex[7] = {0,  1,           2,           3,           4,           5,           6,          };
+byte pieceGenerationIndex[7]                 = {0,  1,           2,           3,           4,           5,           6,          };
 
 
 
@@ -654,15 +654,20 @@ void loop(){
     //====================================================
 
     //gameOver polling
-    if(gameOver()){
-        display.clrScr()
-        display.
+    if(gameOver() == true){
+        #ifdef DEBUG
+        Serial.println("!!!!!!!GAME OVER!!!!!!");
+        #endif
+        display.clrScr();
     }
 
 
 
 
 }
+
+
+
 
 
 
