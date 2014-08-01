@@ -654,6 +654,10 @@ void loop(){
     //====================================================
 
     //gameOver polling
+    if(gameOver()){
+        display.clrScr()
+        display.
+    }
 
 
 
