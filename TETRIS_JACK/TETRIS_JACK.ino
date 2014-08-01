@@ -389,7 +389,7 @@ void movePiece(int direction){
 //Test if a deadblock goes above the visible board
 
 bool gameOver(){
-    for(int i = 0; i < ROWS-10; i++){
+    for(int i = 0; i < ROWS-9; i++){
         for(int j = 0; j < COLS; j++){
             if(deadBlocks[i][j] != BLACK){
                 return true;
