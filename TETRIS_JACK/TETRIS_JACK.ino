@@ -386,6 +386,20 @@ void movePiece(int direction){
                 redraw();
 }
 
+//Test if a deadblock goes above the visible board
+
+void gameOver(){
+    for(int i = 0; i < ROWS-10; i++){
+        for(int j = 0; j < COLS; j++){
+
+        }
+    }
+}
+
+
+
+
+
 // Increment the timer, and if reached gravity delay, move the piece down
 void tick(){
     #ifdef DEBUG
@@ -580,6 +594,11 @@ char lastLeftPress = LOW;
 char lastRotPress = LOW;
 
 void loop(){
+    
+
+
+
+    //Button Press============================================
     //Right button pressed
     if(digitalRead(RBUTTON) == HIGH){
         if(lastRightPress == LOW){
@@ -627,6 +646,15 @@ void loop(){
     else{
         lastRotPress = LOW;
     }
+    //====================================================
+
+
+
+
+
+
+
+    
 }
 
 
