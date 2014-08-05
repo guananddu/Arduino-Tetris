@@ -37,7 +37,7 @@ char* tetrominoDebug         = "OZIJLST";
 #endif
 
 
-
+bool gameOver = false;
 
 // Board description -----------------------------------------------------------
 #define ROWS 22
@@ -285,6 +285,7 @@ void initialise(){
     #ifdef DEBUG
     Serial.println("INIT");
     #endif
+    display.clrScr();
 
     int x1, x2, y1, y2;
     for(int i = 2; i < ROWS; i++){ // top 2 rows are hidden!
@@ -335,7 +336,7 @@ void placePiece(){
         }
     }
 
-    if(gameOver() == true)
+    checkGameOver();
 }
 
 // Move a piece
@@ -394,14 +395,21 @@ void movePiece(int direction){
 
 //Test if a deadblock goes above the visible board
 
-bool gameOver(){
+void checkGameOver(){
     for(int i = 0; i < 2; i++){
         for(int j = 0; j < COLS; j++){
             if(deadBlocks[i][j] != BLACK){
-                return true;
+                gameOver = true;
+                #ifdef DEBUG
+                Serial.println("!!!!!!!!!!!!GAME OVER!!!!!!!!!!!!!!");
+                #endif
+                display.clrScr();
+                // say game over!
+                display.print("GAME OVER", CENTER, 0);            
             }
-            else{
-                return false;
+
+            else
+                gameOver = false;
             }
         }
     }
@@ -409,7 +417,7 @@ bool gameOver(){
 
 void reset(){
 
-
+    initialise();
 
 }
 
@@ -585,7 +593,8 @@ void setup(){
 
 // TIMER INTERRUPT SERVICE ROUTINE ---------------------------------------------
 ISR(TIMER1_COMPA_vect){
-    tick();
+    if(!gameOver)
+        tick();
 }
 
 // BUTTON INTERRUPTS GO HERE ---------------------------------------------------
@@ -663,6 +672,8 @@ void loop(){
     else{
         lastRotPress = LOW;
     }
+
+    
     //====================================================
 
 
