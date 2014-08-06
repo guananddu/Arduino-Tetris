@@ -5,19 +5,20 @@
 
 
 
-
 // Button pins
 #define RESET 12
 #define ROTBUTTON 10
-#define DBUTTON 11
+#define DBUTTON 13
 #define LBUTTON 8
 #define RBUTTON  9
 
 #define BLOCKSIZE 12 // block size on the lcd
 
 #include <UTFT.h>
-extern uint8_t BigFont[]; // TODO Declares font for LCD. Small font currently, need medium font?
+extern uint8_t BigFont[]; // TODO Declares font for LCD.
 UTFT display(ITDB28,A5,A4,A3,A2);
+
+
 
 
 // Tetrominoes -----------------------------------------------------------------
@@ -47,7 +48,7 @@ char board[ROWS][COLS]; // The view combining piece and dead blocks
 char oldBoard[ROWS][COLS]; // The previous frame
 byte currentPiece; // will store the index of the currently used piece
 byte currentRotation;
-int currentPieceArray[4][4];
+char currentPieceArray[4][4];
 volatile int currentPieceRow, currentPieceCol; // Top left of piece is tracked
 
 // PIECE GENERATION AND ROTATION -----------------------------------------------
@@ -282,17 +283,23 @@ int gravity = 60; // gravity delay starts at 1 drop / second
 
 // Initialise the game
 void initialise(){
+	gameOver = false;
+    
     #ifdef DEBUG
     Serial.println("INIT");
     #endif
+    
+
+    //display picture
     display.clrScr();
-    display.setColor
 
 
 
 
 
-    gameOver = false;
+
+
+    
 
     int x1, x2, y1, y2;
     for(int i = 2; i < ROWS; i++){ // top 2 rows are hidden!
@@ -604,7 +611,7 @@ ISR(TIMER1_COMPA_vect){
     if(!gameOver)
         tick();
     else{
-        delay(100)
+        delay(100);
     }
 }
 
@@ -705,6 +712,8 @@ void loop(){
 
 
 }
+
+
 
 
 
