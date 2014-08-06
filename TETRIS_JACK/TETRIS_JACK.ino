@@ -283,7 +283,6 @@ int gravity = 60; // gravity delay starts at 1 drop / second
 
 // Initialise the game
 void initialise(){
-	gameOver = false;
     
     #ifdef DEBUG
     Serial.println("INIT");
@@ -292,7 +291,8 @@ void initialise(){
 
     //display picture
     display.clrScr();
-
+    delay(200);
+    display.fillScr(200,0,0);
 
 
 
@@ -323,9 +323,10 @@ void initialise(){
 
     for(int i = 0; i < ROWS; i++){
         for(int j = 0; j < COLS; j++){
-            deadBlocks[i][j] = 0;
+            deadBlocks[i][j] = BLACK;
         }
     }
+    gameOver = false;
 
     shuffleBag();
     newPiece();
@@ -431,6 +432,20 @@ void checkGameOver(){
 
 
 void reset(){
+    gameOver = true;
+    for(int i = 0; i < SHAPESIZE; i++){
+        for(int j = 0; j < SHAPESIZE; j++){
+            board[i][j] = BLACK;
+            oldBoard[i][j] = BLACK;
+        }
+    }
+    display.clrScr();
+    display.fillScr(VGA_RED);
+    display.setColor(VGA_LIME);
+    display.print("RESET", CENTER,50);
+    delay(500);
+    display.clrScr();
+    delay(500);
 
     initialise();
 
@@ -535,7 +550,7 @@ void redraw(){
                 // dumb way to begin with (constantly refreshing EVERYTHING!!!)
                 if(board[i][j] == BLACK){
                     // clear the block
-                    display.setColor(VGA_BLACK);
+                    display.setColor(200,0,0);
                     display.fillRect(x1, y1, x2, y2);
                     
                     // draw the outline
@@ -547,7 +562,7 @@ void redraw(){
                         case RED: display.setColor(VGA_RED); break;
                         case CYAN: display.setColor(VGA_AQUA); break;
                         case BLUE: display.setColor(VGA_BLUE); break;
-                        case ORANGE: display.setColor(255, 165, 0); break;
+                        case ORANGE: display.setColor(255, 180, 0); break;
                         case YELLOW: display.setColor(VGA_YELLOW); break;
                         case GREEN: display.setColor(VGA_LIME); break;
                         case PURPLE: display.setColor(VGA_FUCHSIA); break;
@@ -712,23 +727,3 @@ void loop(){
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
