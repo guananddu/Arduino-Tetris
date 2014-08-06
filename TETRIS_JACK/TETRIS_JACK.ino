@@ -405,7 +405,7 @@ void checkGameOver(){
                 #endif
                 display.clrScr();
                 // say game over!
-                display.print("GAME OVER", CENTER, 0);            
+                display.print("GAME OVER - Please press reset", CENTER, 0);            
             }
 
             else
@@ -618,6 +618,7 @@ char lastRightPress = LOW;
 char lastDownPress =  LOW;
 char lastLeftPress = LOW;
 char lastRotPress = LOW;
+char lastResPress = LOW;
 
 void loop(){
     
@@ -673,7 +674,18 @@ void loop(){
         lastRotPress = LOW;
     }
 
-    
+    //Reset button pressed
+    if(digitalRead(RESET) == HIGH){
+        if(lastResPress == LOW){
+            reset();
+            lastResPress = HIGH;
+        }
+    }
+
+    else{
+        lastResPress = LOW;
+    }
+
     //====================================================
 
 
