@@ -287,12 +287,12 @@ void initialise(){
     #ifdef DEBUG
     Serial.println("INIT");
     #endif
-    
+    display.setBrightness(16);
 
     //display picture
     display.clrScr();
     delay(200);
-    display.fillScr(200,0,0);
+    display.fillScr(200,0,50);
 
 
 
@@ -440,10 +440,11 @@ void reset(){
         }
     }
     display.clrScr();
-    display.fillScr(VGA_RED);
+    display.fillScr(255,0,0);
     display.setColor(VGA_LIME);
+    display.setBackColor(255,0,0);
     display.print("RESET", CENTER,50);
-    delay(500);
+    delay(1000);
     display.clrScr();
     delay(500);
 
@@ -550,7 +551,7 @@ void redraw(){
                 // dumb way to begin with (constantly refreshing EVERYTHING!!!)
                 if(board[i][j] == BLACK){
                     // clear the block
-                    display.setColor(200,0,0);
+                    display.setColor(200,0,50);
                     display.fillRect(x1, y1, x2, y2);
                     
                     // draw the outline
@@ -727,3 +728,5 @@ void loop(){
 
 
 }
+
+
