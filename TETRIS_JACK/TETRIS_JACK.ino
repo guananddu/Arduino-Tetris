@@ -1,4 +1,4 @@
-// TETRIS by Jack Carey
+// TETRIS by Jack Carey - Huge credit to Chris Claoue-Long and Abbie Wade
 
 // Comment to disable debugging
 //#define DEBUG
@@ -8,15 +8,15 @@
 
 // Button pins
 #define RESET 12
-#define ROTBUTTON 11
-#define DBUTTON 10
+#define ROTBUTTON 10
+#define DBUTTON 11
 #define LBUTTON 8
 #define RBUTTON  9
 
 #define BLOCKSIZE 12 // block size on the lcd
 
 #include <UTFT.h>
-extern uint8_t SmallFont[]; // TODO Declares font for LCD. Small font currently, need medium font?
+extern uint8_t BigFont[]; // TODO Declares font for LCD. Small font currently, need medium font?
 UTFT display(ITDB28,A5,A4,A3,A2);
 
 
@@ -286,6 +286,13 @@ void initialise(){
     Serial.println("INIT");
     #endif
     display.clrScr();
+    display.setColor
+
+
+
+
+
+    gameOver = false;
 
     int x1, x2, y1, y2;
     for(int i = 2; i < ROWS; i++){ // top 2 rows are hidden!
@@ -405,15 +412,16 @@ void checkGameOver(){
                 #endif
                 display.clrScr();
                 // say game over!
-                display.print("GAME OVER - Please press reset", CENTER, 0);            
+                display.setColor(VGA_RED);
+                display.print("GAME OVER", CENTER,0); 
+                display.print("Please press", CENTER, 50); 
+                display.print("reset.", CENTER, 80); 
             }
 
-            else
-                gameOver = false;
-            }
         }
     }
 }
+
 
 void reset(){
 
@@ -560,7 +568,7 @@ void setup(){
 
     // Start the LCD
     display.InitLCD(0); // Set as portrait mode
-    display.setFont(SmallFont); // Use small font for scores (if any at all!)
+    display.setFont(BigFont); // Use small font for scores (if any at all!)
     display.clrScr();
     display.setBackColor(VGA_BLACK);
 
@@ -595,6 +603,9 @@ void setup(){
 ISR(TIMER1_COMPA_vect){
     if(!gameOver)
         tick();
+    else{
+        delay(100)
+    }
 }
 
 // BUTTON INTERRUPTS GO HERE ---------------------------------------------------
@@ -694,6 +705,9 @@ void loop(){
 
 
 }
+
+
+
 
 
 
