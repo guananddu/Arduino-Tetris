@@ -21,6 +21,7 @@ UTFT display(ITDB28,A5,A4,A3,A2);
 
 
 
+
 // Tetrominoes -----------------------------------------------------------------
 #include "tetrominoes.h" // defines Tetromino colours and matrices
 // Tetromino list
@@ -36,7 +37,6 @@ byte pieceGenerationIndex[7]                 = {0,  1,           2,           3,
 char* tetromino_letters      = ".ZIJLOST"; // Pieces printed over serial according to their colour
 char* tetrominoDebug         = "OZIJLST";
 #endif
-
 
 bool gameOver = false;
 
@@ -287,11 +287,11 @@ void initialise(){
     #ifdef DEBUG
     Serial.println("INIT");
     #endif
+    
     display.setBrightness(16);
 
     //display picture
     display.clrScr();
-    delay(200);
     display.fillScr(200,0,50);
 
 
@@ -352,6 +352,7 @@ void placePiece(){
     }
 
     checkGameOver();
+
 }
 
 // Move a piece
@@ -419,8 +420,11 @@ void checkGameOver(){
                 Serial.println("!!!!!!!!!!!!GAME OVER!!!!!!!!!!!!!!");
                 #endif
                 display.clrScr();
+                display.fillScr(6,101,255);
+                display.setBackColor(6,101,255);
+
                 // say game over!
-                display.setColor(VGA_RED);
+                display.setColor(255,90,40);
                 display.print("GAME OVER", CENTER,0); 
                 display.print("Please press", CENTER, 50); 
                 display.print("reset.", CENTER, 80); 
@@ -430,6 +434,8 @@ void checkGameOver(){
     }
 }
 
+
+//reinitialises the game
 
 void reset(){
     gameOver = true;
@@ -444,13 +450,43 @@ void reset(){
     display.setColor(VGA_LIME);
     display.setBackColor(255,0,0);
     display.print("RESET", CENTER,50);
-    delay(1000);
+    delay(175);
     display.clrScr();
-    delay(500);
+    delay(650);
 
     initialise();
 
 }
+
+
+void checkLineClear(){
+    bool lineClear;
+    for(int i = currentPieceRow, i<SHAPESIZE, i++){
+        
+        lineClear = true;
+        
+        for(int j = 0, j < COLS, j++){
+            if(deadBlocks[i][j] == BLACK){
+                lineClear = false;
+                break;
+            }
+            else{
+
+            }
+
+        }
+        if(lineClear == true){
+            for(int j = 0, j < COLS, j++){
+                deadBlocks[i][j] = BLACK;
+            }
+        }
+
+
+    }
+
+}
+
+
 
 
 
