@@ -12,7 +12,7 @@
 #define LBUTTON 8
 #define RBUTTON  9
 
-#define BLOCKSIZE 12 // block size on the lcd
+#define BLOCKSIZE 12 // block size on the lcd in px
 
 #include <UTFT.h>
 extern uint8_t BigFont[]; // TODO Declares font for LCD.
@@ -461,11 +461,11 @@ void reset(){
 
 void checkLineClear(){
     bool lineClear;
-    for(int i = currentPieceRow, i<SHAPESIZE, i++){
+    for(int i = currentPieceRow; i<SHAPESIZE; i++){
         
         lineClear = true;
         
-        for(int j = 0, j < COLS, j++){
+        for(int j = 0; j < COLS; j++){
             if(deadBlocks[i][j] == BLACK){
                 lineClear = false;
                 break;
@@ -476,7 +476,7 @@ void checkLineClear(){
 
         }
         if(lineClear == true){
-            for(int j = 0, j < COLS, j++){
+            for(int j = 0; j < COLS; j++){
                 deadBlocks[i][j] = BLACK;
             }
         }
