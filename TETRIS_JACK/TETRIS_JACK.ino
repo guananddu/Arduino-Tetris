@@ -31,7 +31,7 @@ byte pieceIndex[25]                          = {0,  1, 2, 3, 4,  5, 6, 7, 8,  9,
 // Piece generation list (randomly shuffled for each bag)
 byte pieceGenerationIndex[7]                 = {0,  1,           2,           3,           4,           5,           6,          };
 
-
+bool lineClear =true;
 
 #ifdef DEBUG
 char* tetromino_letters      = ".ZIJLOST"; // Pieces printed over serial according to their colour
@@ -58,10 +58,6 @@ int counter = 0; // Initially choose first piece out of bag
 void shuffleBag(){
     #ifdef DEBUG
     Serial.println("Shuffling");
-    for(int i = 0; i < 7; i++){
-       Serial.print(tetrominoDebug[pieceGenerationIndex[i]]);
-    }
-    Serial.println();
     #endif
 
     randomSeed(millis());
@@ -75,10 +71,6 @@ void shuffleBag(){
 
     #ifdef DEBUG
     Serial.println("Done!");
-    for(int i = 0; i < 7; i++){
-       Serial.print(tetrominoDebug[pieceGenerationIndex[i]]);
-    }
-    Serial.println();
 
     #endif
 }
@@ -351,7 +343,9 @@ void placePiece(){
         }
     }
 
+    // checkLineClear();
     checkGameOver();
+
 
 }
 
@@ -361,12 +355,6 @@ void movePiece(int direction){
     #ifdef DEBUG
     Serial.println();
     Serial.print("Moving piece ");
-    switch(direction){
-        case MOVE_LEFT: Serial.println("MOVE_LEFT"); break;
-        case MOVE_RIGHT: Serial.println("MOVE_RIGHT"); break;
-        case MOVE_DOWN: Serial.println("MOVE_DOWN"); break;
-        case MOVE_ROTATE: Serial.println("MOVE_ROTATE"); break;
-    }
     #endif
 
     switch(direction){
@@ -417,7 +405,7 @@ void checkGameOver(){
             if(deadBlocks[i][j] != BLACK){
                 gameOver = true;
                 #ifdef DEBUG
-                Serial.println("!!!!!!!!!!!!GAME OVER!!!!!!!!!!!!!!");
+                Serial.println("!!!!!!!!!GAME OVER!!!!!!!!!!!");
                 #endif
                 display.clrScr();
                 display.fillScr(6,101,255);
@@ -428,6 +416,7 @@ void checkGameOver(){
                 display.print("GAME OVER", CENTER,0); 
                 display.print("Please press", CENTER, 50); 
                 display.print("reset.", CENTER, 80); 
+                delay(500);
             }
 
         }
@@ -459,32 +448,59 @@ void reset(){
 }
 
 
-void checkLineClear(){
-    bool lineClear;
-    for(int i = currentPieceRow; i<SHAPESIZE; i++){
+// void checkLineClear(){
+//     #ifdef DEBUG
+//     Serial.println("Checking for line clear...");
+//     #endif
+    
+
+    
+//     for(int i = 0; i < SHAPESIZE; i++){
         
-        lineClear = true;
+
+//         #ifdef DEBUG
+//         Serial.println("Entering loop (FIRST)");
+//         #endif
         
-        for(int j = 0; j < COLS; j++){
-            if(deadBlocks[i][j] == BLACK){
-                lineClear = false;
-                break;
-            }
-            else{
-
-            }
-
-        }
-        if(lineClear == true){
-            for(int j = 0; j < COLS; j++){
-                deadBlocks[i][j] = BLACK;
-            }
-        }
 
 
-    }
+//         lineClear = true;
+        
 
-}
+        
+//         for(int j = 0; j < COLS; j++){
+//             #ifdef DEBUG
+//             Serial.println("ENTERING LOOP (SENCOND)");
+//             #endif
+
+//             if(deadBlocks[i][j] == BLACK){
+//                 lineClear = false;
+//                 break;
+//             }
+//             else{
+
+//             }
+
+//         }
+        
+
+//         #ifdef DEBUG
+//         Serial.print("LINE CLEAR");
+//         #endif
+        
+
+
+
+//         if(lineClear == true){
+//             for(int j = 0; j < COLS; j++){
+//                 deadBlocks[i][j] = BLACK;
+//             }
+//         }
+
+
+//     }
+
+// }
 
 
 
@@ -500,7 +516,7 @@ void tick(){
 
     timer++;
 
-    if (timer > gravity){
+    if ((timer > gravity) && (gameOver == false)){
         movePiece(MOVE_DOWN);
         timer = 0;
     }
@@ -663,7 +679,7 @@ ISR(TIMER1_COMPA_vect){
     if(!gameOver)
         tick();
     else{
-        delay(100);
+
     }
 }
 
@@ -697,7 +713,7 @@ void loop(){
 
     //Button Press============================================
     //Right button pressed
-    if(digitalRead(RBUTTON) == HIGH){
+    if((digitalRead(RBUTTON) == HIGH) && (gameOver == false)){
         if(lastRightPress == LOW){
             movePiece(MOVE_RIGHT);
             lastRightPress = HIGH;
@@ -709,7 +725,7 @@ void loop(){
     }
 
     //Left button pressed
-    if(digitalRead(LBUTTON) == HIGH){
+    if((digitalRead(LBUTTON) == HIGH) && (gameOver == false)){
         if(lastLeftPress == LOW){
             movePiece(MOVE_LEFT);
             lastLeftPress = HIGH;
@@ -721,7 +737,7 @@ void loop(){
     }
     
     //Down button pressed
-    if(digitalRead(DBUTTON) == HIGH){
+    if((digitalRead(DBUTTON) == HIGH) && (gameOver == false)){
         if(lastDownPress == LOW){
             movePiece(MOVE_DOWN);
             lastDownPress = HIGH;
@@ -733,7 +749,7 @@ void loop(){
     }
 
     //Rot button pressed
-    if(digitalRead(ROTBUTTON) == HIGH){
+    if((digitalRead(ROTBUTTON) == HIGH) && (gameOver == false)){
         if(lastRotPress == LOW){
             movePiece(MOVE_ROTATE);
             lastRotPress = HIGH;
@@ -745,7 +761,7 @@ void loop(){
     }
 
     //Reset button pressed
-    if(digitalRead(RESET) == HIGH){
+    if((digitalRead(RESET) == HIGH) && (gameOver == false)){
         if(lastResPress == LOW){
             reset();
             lastResPress = HIGH;
@@ -764,5 +780,9 @@ void loop(){
 
 
 }
+
+
+
+
 
 
