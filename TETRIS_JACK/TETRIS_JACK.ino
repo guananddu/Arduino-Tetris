@@ -2,6 +2,7 @@
 
 // Comment to disable debugging
 //#define DEBUG
+//#define DEBUG2
 
 
 
@@ -31,7 +32,7 @@ byte pieceIndex[25]                          = {0,  1, 2, 3, 4,  5, 6, 7, 8,  9,
 // Piece generation list (randomly shuffled for each bag)
 byte pieceGenerationIndex[7]                 = {0,  1,           2,           3,           4,           5,           6,          };
 
-bool lineClear =true;
+//bool lineClear =true;
 
 #ifdef DEBUG
 char* tetromino_letters      = ".ZIJLOST"; // Pieces printed over serial according to their colour
@@ -49,6 +50,7 @@ char oldBoard[ROWS][COLS]; // The previous frame
 byte currentPiece; // will store the index of the currently used piece
 byte currentRotation;
 char currentPieceArray[4][4];
+//char oldPieceArray[4][4];
 volatile int currentPieceRow, currentPieceCol; // Top left of piece is tracked
 
 // PIECE GENERATION AND ROTATION -----------------------------------------------
@@ -77,6 +79,14 @@ void shuffleBag(){
 
 // Grab a new piece
 void newPiece(){
+    
+    // for(int i = 0; i < SHAPESIZE; i++){
+    //     for(int j = 0; j < SHAPESIZE; j++){
+    //         oldPieceArray[i][j] = tetrominoes[currentPiece][i][j];
+    //     }
+    // }
+    
+    
     #ifdef DEBUG
     Serial.println("NP");
     #endif
@@ -121,6 +131,8 @@ void newPiece(){
     }
 
     counter++;
+
+
 
 
 }
@@ -193,6 +205,12 @@ bool checkBelow(){
 
 // Rotate the piece
 void rotate(){
+    
+    // for(int i = 0; i < SHAPESIZE; i++){
+    //     for(int j = 0; j < SHAPESIZE; j++){
+    //         oldPieceArray[i][j] = tetrominoes[currentRotation][i][j];
+    //     }
+    // }
     
     #ifdef DEBUG
     Serial.println("ROT");
@@ -334,7 +352,8 @@ void placePiece(){
     #endif
 
 
-    for(int i = 0; i < SHAPESIZE; i++){
+    if(!gameOver){
+        for(int i = 0; i < SHAPESIZE; i++){
         for(int j = 0; j < SHAPESIZE; j++){
             if(currentPieceArray[i][j] != BLACK){
                 deadBlocks[i+currentPieceRow][j+currentPieceCol] = currentPieceArray[i][j];
@@ -343,6 +362,10 @@ void placePiece(){
         }
     }
 
+    }
+
+
+    
     // checkLineClear();
     checkGameOver();
 
@@ -363,9 +386,9 @@ void movePiece(int direction){
                 currentPieceCol--;
             }
             else{
-                #ifdef DEBUG
-                Serial.println("ILLEGAL (Left)");
-                #endif
+//                #ifdef DEBUG
+//                Serial.println("ILLEGAL (Left)");
+//                #endif
             
 
             }
@@ -375,9 +398,9 @@ void movePiece(int direction){
                 currentPieceCol++;
             }
             else{
-                #ifdef DEBUG
-                Serial.println("ILLEGAL (Right)");
-                #endif
+//                #ifdef DEBUG
+//                Serial.println("ILLEGAL (Right)");
+//                #endif
             }
             break;
         case MOVE_DOWN:
@@ -400,25 +423,28 @@ void movePiece(int direction){
 //Test if a deadblock goes above the visible board
 
 void checkGameOver(){
-    for(int i = 0; i < 2; i++){
-        for(int j = 0; j < COLS; j++){
-            if(deadBlocks[i][j] != BLACK){
-                gameOver = true;
-                #ifdef DEBUG
-                Serial.println("!!!!!!!!!GAME OVER!!!!!!!!!!!");
-                #endif
-                display.clrScr();
-                display.fillScr(6,101,255);
-                display.setBackColor(6,101,255);
+    if(!gameOver){
 
-                // say game over!
-                display.setColor(255,90,40);
-                display.print("GAME OVER", CENTER,0); 
-                display.print("Please press", CENTER, 50); 
-                display.print("reset.", CENTER, 80); 
-                delay(500);
+        for(int i = 0; i < 2; i++){
+            for(int j = 0; j < COLS; j++){
+                if(deadBlocks[i][j] != BLACK){
+                    gameOver = true;
+                    #ifdef DEBUG
+                    Serial.println("!GAME OVER!");
+                    #endif
+                    display.clrScr();
+                    display.fillScr(6,101,255);
+                    display.setBackColor(6,101,255);
+                    delay(200);
+                    // say game over!
+                    display.setColor(255,90,40);
+                    display.print("GAME OVER", CENTER,0); 
+                    display.print("Please press", CENTER, 50); 
+                    display.print("reset.", CENTER, 80); 
+                    delay(1000);
+                }
+
             }
-
         }
     }
 }
@@ -449,57 +475,50 @@ void reset(){
 
 
 // void checkLineClear(){
-//     #ifdef DEBUG
-//     Serial.println("Checking for line clear...");
+//     #ifdef DEBUG2
+//     Serial.println("Starting to check line!");
+//     for(int i = 0; i<SHAPESIZE; i++){
+//         Serial.println();
+//       for(int j = 0; j<SHAPESIZE; j++){
+//         Serial.print(oldPieceArray[i][j]);
+//       }
+//     }
 //     #endif
     
-
-    
+//     lineClear = true;
 //     for(int i = 0; i < SHAPESIZE; i++){
-        
+//         for(int j = 0; j < SHAPESIZE; j++){
+//             if(oldPieceArray[currentPieceRow+i][currentPieceCol+j] != BLACK){
+//                 #ifdef DEBUG2
+//                 Serial.println("IT'S TRUE");
+//                 #endif
+                
 
-//         #ifdef DEBUG
-//         Serial.println("Entering loop (FIRST)");
-//         #endif
-        
+                
+//                 for(int a = 0; a < COLS; a++){
 
+//                     if(deadBlocks[currentPieceRow+i][a] == BLACK){
+//                         lineClear = false;
+//                         break;
+//                     }
 
-//         lineClear = true;
-        
+//                 }
+//                 //will break to here
+//                 if(lineClear == true){
+//                     #ifdef DEBUG2
+//                     Serial.println("LINE CLEARING");
+//                     #endif
+//                     for(int j = 0; j < COLS; j++){
+//                         deadBlocks[i][j] = BLACK;
+//                     }
+//                 }
 
-        
-//         for(int j = 0; j < COLS; j++){
-//             #ifdef DEBUG
-//             Serial.println("ENTERING LOOP (SENCOND)");
-//             #endif
-
-//             if(deadBlocks[i][j] == BLACK){
-//                 lineClear = false;
-//                 break;
-//             }
-//             else{
 
 //             }
 
 //         }
-        
-
-//         #ifdef DEBUG
-//         Serial.print("LINE CLEAR");
-//         #endif
-        
-
-
-
-//         if(lineClear == true){
-//             for(int j = 0; j < COLS; j++){
-//                 deadBlocks[i][j] = BLACK;
-//             }
-//         }
-
-
 //     }
-
+    
 // }
 
 
@@ -761,7 +780,7 @@ void loop(){
     }
 
     //Reset button pressed
-    if((digitalRead(RESET) == HIGH) && (gameOver == false)){
+    if(digitalRead(RESET) == HIGH){
         if(lastResPress == LOW){
             reset();
             lastResPress = HIGH;
@@ -780,6 +799,17 @@ void loop(){
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
