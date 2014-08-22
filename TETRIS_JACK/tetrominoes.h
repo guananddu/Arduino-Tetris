@@ -13,6 +13,7 @@
 
 // Shape size
 #define SHAPESIZE 4
+#define GRIDSIZE SHAPESIZE*SHAPESIZE
 
 // Z (red)
 #define Z1 { \
@@ -179,6 +180,12 @@
 }
 
 #endif
+
+
+
+
+
+
 
 
 

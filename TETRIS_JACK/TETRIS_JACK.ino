@@ -3,13 +3,14 @@
 // Comment to disable debugging
 //#define DEBUG
 //#define DEBUG2
+#define DEBUG3
 
 
 
 // Button pins
-#define RESET 12
-#define ROTBUTTON 10
-#define DBUTTON 13
+#define RESET 10
+#define ROTBUTTON 13
+#define DBUTTON 12
 #define LBUTTON 8
 #define RBUTTON  9
 
@@ -32,7 +33,7 @@ byte pieceIndex[25]                          = {0,  1, 2, 3, 4,  5, 6, 7, 8,  9,
 // Piece generation list (randomly shuffled for each bag)
 byte pieceGenerationIndex[7]                 = {0,  1,           2,           3,           4,           5,           6,          };
 
-//bool lineClear =true;
+bool lineClear =true;
 
 #ifdef DEBUG
 char* tetromino_letters      = ".ZIJLOST"; // Pieces printed over serial according to their colour
@@ -50,8 +51,9 @@ char oldBoard[ROWS][COLS]; // The previous frame
 byte currentPiece; // will store the index of the currently used piece
 byte currentRotation;
 char currentPieceArray[4][4];
-//char oldPieceArray[4][4];
+char oldPieceArray[4][4];
 volatile int currentPieceRow, currentPieceCol; // Top left of piece is tracked
+volatile int oldPieceRow, oldPieceCol;
 
 // PIECE GENERATION AND ROTATION -----------------------------------------------
 int counter = 0; // Initially choose first piece out of bag
@@ -80,12 +82,11 @@ void shuffleBag(){
 // Grab a new piece
 void newPiece(){
     
-    // for(int i = 0; i < SHAPESIZE; i++){
-    //     for(int j = 0; j < SHAPESIZE; j++){
-    //         oldPieceArray[i][j] = tetrominoes[currentPiece][i][j];
-    //     }
-    // }
-    
+    oldPieceCol = currentPieceCol;
+    oldPieceRow = currentPieceRow;
+
+    memcpy(oldPieceArray, currentPieceArray, GRIDSIZE);
+
     
     #ifdef DEBUG
     Serial.println("NP");
@@ -205,12 +206,11 @@ bool checkBelow(){
 
 // Rotate the piece
 void rotate(){
+
+    oldPieceCol = currentPieceCol;
+    oldPieceRow = currentPieceRow;
     
-    // for(int i = 0; i < SHAPESIZE; i++){
-    //     for(int j = 0; j < SHAPESIZE; j++){
-    //         oldPieceArray[i][j] = tetrominoes[currentRotation][i][j];
-    //     }
-    // }
+    memcpy(oldPieceArray, currentPieceArray, GRIDSIZE);
     
     #ifdef DEBUG
     Serial.println("ROT");
@@ -298,7 +298,12 @@ void initialise(){
     Serial.println("INIT");
     #endif
     
-    display.setBrightness(16);
+    display.setBrightness(16);//set to highest brightness
+
+    oldPieceCol = currentPieceCol;
+    oldPieceRow = currentPieceRow;
+
+    memcpy(oldPieceArray, currentPieceArray, GRIDSIZE);
 
     //display picture
     display.clrScr();
@@ -366,7 +371,7 @@ void placePiece(){
 
 
     
-    // checkLineClear();
+    checkLineClear();
     checkGameOver();
 
 
@@ -374,6 +379,12 @@ void placePiece(){
 
 // Move a piece
 void movePiece(int direction){
+
+    oldPieceCol = currentPieceCol;
+    oldPieceRow = currentPieceRow;
+
+    memcpy(oldPieceArray, currentPieceArray, GRIDSIZE);
+
 
     #ifdef DEBUG
     Serial.println();
@@ -474,52 +485,56 @@ void reset(){
 }
 
 
-// void checkLineClear(){
-//     #ifdef DEBUG2
-//     Serial.println("Starting to check line!");
-//     for(int i = 0; i<SHAPESIZE; i++){
-//         Serial.println();
-//       for(int j = 0; j<SHAPESIZE; j++){
-//         Serial.print(oldPieceArray[i][j]);
-//       }
-//     }
-//     #endif
+void checkLineClear(){
+    #ifdef DEBUG3
+    Serial.println("Starting to check line!");
+    #endif
     
-//     lineClear = true;
-//     for(int i = 0; i < SHAPESIZE; i++){
-//         for(int j = 0; j < SHAPESIZE; j++){
-//             if(oldPieceArray[currentPieceRow+i][currentPieceCol+j] != BLACK){
-//                 #ifdef DEBUG2
-//                 Serial.println("IT'S TRUE");
-//                 #endif
+    lineClear = true;
+    for(int i = 0; i < SHAPESIZE; i++){
+        for(int j = 0; j < SHAPESIZE; j++){
+            #ifdef DEBUG3
+            Serial.println("Inside loops now!!!!");
+            #endif
+            if(oldPieceArray[oldPieceRow+i][oldPieceCol+j] != BLACK){
                 
 
+                #ifdef DEBUG3
+                Serial.println("IT'S TRUE");
+                #endif
                 
-//                 for(int a = 0; a < COLS; a++){
+                    
+                for(int a = 0; a < COLS; a++){
 
-//                     if(deadBlocks[currentPieceRow+i][a] == BLACK){
-//                         lineClear = false;
-//                         break;
-//                     }
+                    if(deadBlocks[oldPieceRow+i][a] == BLACK){
+                        lineClear = false;
+                        break;
+                    }
 
-//                 }
-//                 //will break to here
-//                 if(lineClear == true){
-//                     #ifdef DEBUG2
-//                     Serial.println("LINE CLEARING");
-//                     #endif
-//                     for(int j = 0; j < COLS; j++){
-//                         deadBlocks[i][j] = BLACK;
-//                     }
-//                 }
+                }
+
+                //breaks to here
 
 
-//             }
+                if(lineClear == true){
+                    
+                    #ifdef DEBUG3
+                    Serial.println("LINE CLEARING");
+                    #endif
+                    
+                    for(int b = 0; b < COLS; b++){
+                        deadBlocks[i][b] = BLACK;
+                    }
+                }
 
-//         }
-//     }
+
+
+            }
+
+        }
+    }
     
-// }
+}
 
 
 
@@ -551,6 +566,39 @@ void tick(){
 
 // Redraw the screen
 void redraw(){
+
+    #ifdef DEBUG2
+    Serial.println("OLD PIECE");
+    for(int i = 0; i<SHAPESIZE;i++){
+        for(int j = 0; j<SHAPESIZE;j++){
+            Serial.print(int(oldPieceArray[i][j]));
+        }
+        Serial.println();
+    }
+    Serial.println();
+    Serial.println("NEW PIECE");
+    for(int i = 0; i<SHAPESIZE;i++){
+        for(int j = 0; j<SHAPESIZE;j++){
+            Serial.print(int(currentPieceArray[i][j]));
+        }
+        Serial.println();
+    }
+    Serial.println();
+
+
+    Serial.print("old Row: ");
+    Serial.println(oldPieceRow);
+    Serial.println();
+    Serial.print("old Col: ");
+    Serial.println(oldPieceCol);
+    Serial.println();
+    Serial.print("curr Row: ");
+    Serial.println(currentPieceRow);
+    Serial.println();
+    Serial.print("curr Col: ");
+    Serial.println(currentPieceCol);
+    Serial.println();
+    #endif
 
     //make the oldBoard = board.
     for(int i = 0; i < ROWS; i++){
@@ -799,14 +847,6 @@ void loop(){
 
 
 }
-
-
-
-
-
-
-
-
 
 
 
