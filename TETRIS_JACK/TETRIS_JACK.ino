@@ -3,16 +3,16 @@
 // Comment to disable debugging
 //#define DEBUG
 //#define DEBUG2
-#define DEBUG3
-#define DEBUG4
+//#define DEBUG3
+//#define DEBUG4
 
 
 // Button pins
-#define RESET 10
+#define RESET 8
 #define ROTBUTTON 13
 #define DBUTTON 12
-#define LBUTTON 8
-#define RBUTTON  9
+#define LBUTTON 9
+#define RBUTTON  10
 
 #define BLOCKSIZE 12 // block size on the lcd in px
 
