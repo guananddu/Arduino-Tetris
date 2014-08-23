@@ -4,7 +4,7 @@
 //#define DEBUG
 //#define DEBUG2
 #define DEBUG3
-
+#define DEBUG4
 
 
 // Button pins
@@ -476,9 +476,9 @@ void reset(){
     display.setColor(VGA_LIME);
     display.setBackColor(255,0,0);
     display.print("RESET", CENTER,50);
-    delay(175);
+    delay(830);
     display.clrScr();
-    delay(650);
+    delay(400);
 
     initialise();
 
@@ -493,20 +493,19 @@ void checkLineClear(){
     lineClear = true;
     for(int i = 0; i < SHAPESIZE; i++){
         for(int j = 0; j < SHAPESIZE; j++){
-            #ifdef DEBUG3
-            Serial.println("Inside loops now!!!!");
-            #endif
-            if(oldPieceArray[oldPieceRow+i][oldPieceCol+j] != BLACK){
+ 
+            if(oldPieceArray[i][j] != BLACK){
                 
 
-                #ifdef DEBUG3
-                Serial.println("IT'S TRUE");
-                #endif
+                // #ifdef DEBUG3
+                // Serial.println("IT'S TRUE");
+                // #endif
                 
                     
                 for(int a = 0; a < COLS; a++){
-
+                    lineClear = true;
                     if(deadBlocks[oldPieceRow+i][a] == BLACK){
+                        Serial.println("Yep - don't line clear this time.");
                         lineClear = false;
                         break;
                     }
@@ -515,7 +514,6 @@ void checkLineClear(){
 
                 //breaks to here
 
-
                 if(lineClear == true){
                     
                     #ifdef DEBUG3
@@ -523,7 +521,7 @@ void checkLineClear(){
                     #endif
                     
                     for(int b = 0; b < COLS; b++){
-                        deadBlocks[i][b] = BLACK;
+                        deadBlocks[oldPieceRow+i][b] = BLACK;
                     }
                 }
 
@@ -584,8 +582,15 @@ void redraw(){
         Serial.println();
     }
     Serial.println();
-
-
+    #endif
+    #ifdef DEBUG4
+    Serial.println();
+    Serial.println();
+    Serial.println();
+    Serial.println();
+    Serial.println();
+    Serial.println();
+    Serial.println();
     Serial.print("old Row: ");
     Serial.println(oldPieceRow);
     Serial.println();
@@ -847,6 +852,10 @@ void loop(){
 
 
 }
+
+
+
+
 
 
 
