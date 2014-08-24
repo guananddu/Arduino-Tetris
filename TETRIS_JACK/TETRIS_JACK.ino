@@ -5,6 +5,7 @@
 //#define DEBUG2
 //#define DEBUG3
 //#define DEBUG4
+#define DEBUG5
 
 
 // Button pins
@@ -25,7 +26,7 @@ UTFT display(ITDB28,A5,A4,A3,A2);
 
 
 // Tetrominoes -----------------------------------------------------------------
-#include "tetrominoes.h" // defines Tetromino colours and matrices
+#include "tetrominoes.h" // defines Tetromino colours and matrixes
 // Tetromino list
 char tetrominoes[25][SHAPESIZE][SHAPESIZE]   = {O1, Z1,Z2,Z3,Z4, I1,I2,I3,I4, J1,J2,J3,J4, L1,L2,L3,L4, S1,S2,S3,S4, T1,T2,T3,T4};
 // Piece index list
@@ -300,21 +301,21 @@ void initialise(){
     
     display.setBrightness(16);//set to highest brightness
 
+    
+    //set old values
     oldPieceCol = currentPieceCol;
     oldPieceRow = currentPieceRow;
 
     memcpy(oldPieceArray, currentPieceArray, GRIDSIZE);
 
-    //display picture
+ 
+
+
     display.clrScr();
     display.fillScr(200,0,50);
 
 
 
-
-
-
-    
 
     int x1, x2, y1, y2;
     for(int i = 2; i < ROWS; i++){ // top 2 rows are hidden!
@@ -446,13 +447,11 @@ void checkGameOver(){
                     display.clrScr();
                     display.fillScr(6,101,255);
                     display.setBackColor(6,101,255);
-                    delay(200);
                     // say game over!
                     display.setColor(255,90,40);
                     display.print("GAME OVER", CENTER,0); 
                     display.print("Please press", CENTER, 50); 
                     display.print("reset.", CENTER, 80); 
-                    delay(1000);
                 }
 
             }
@@ -496,16 +495,12 @@ void checkLineClear(){
  
             if(oldPieceArray[i][j] != BLACK){
                 
-
-                // #ifdef DEBUG3
-                // Serial.println("IT'S TRUE");
-                // #endif
                 
                     
                 for(int a = 0; a < COLS; a++){
                     lineClear = true;
                     if(deadBlocks[oldPieceRow+i][a] == BLACK){
-                        Serial.println("Yep - don't line clear this time.");
+                        
                         lineClear = false;
                         break;
                     }
@@ -514,25 +509,43 @@ void checkLineClear(){
 
                 //breaks to here
 
-                if(lineClear == true){
+                if(lineClear == true){//If nothing is black in the line, clear it, then drop dead blocks
                     
-                    #ifdef DEBUG3
+                    #ifdef DEBUG5
                     Serial.println("LINE CLEARING");
                     #endif
                     
                     for(int b = 0; b < COLS; b++){
                         deadBlocks[oldPieceRow+i][b] = BLACK;
                     }
+                    #ifdef DEBUG5
+                    Serial.println("line cleared:");
+                    Serial.println(oldPieceRow+i);
+                    #endif
+                    moveDeadBlocksDown(oldPieceRow+i-1);
                 }
-
-
-
+                
             }
+        }
+    } 
+}
 
+void moveDeadBlocksDown(int currentRow){
+    char letter;
+    for(int x = currentRow; x >= 0; x--){//reverse through the array (so we don't move numbers ontop of each other)
+        for(int y = COLS; y >= 0; y--){
+            
+
+            if(deadBlocks[x][y] != BLACK){
+                letter = deadBlocks[x][y];
+                deadBlocks[x][y] = BLACK;
+                deadBlocks[x+1][y] = letter;
+                
+            }
         }
     }
-    
 }
+
 
 
 
@@ -604,6 +617,7 @@ void redraw(){
     Serial.println(currentPieceCol);
     Serial.println();
     #endif
+
 
     //make the oldBoard = board.
     for(int i = 0; i < ROWS; i++){
@@ -852,6 +866,21 @@ void loop(){
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
