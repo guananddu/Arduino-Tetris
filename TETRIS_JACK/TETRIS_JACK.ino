@@ -5,7 +5,7 @@
 //#define DEBUG2
 //#define DEBUG3
 //#define DEBUG4
-#define DEBUG5
+//#define DEBUG5
 
 
 // Button pins
@@ -20,7 +20,6 @@
 #include <UTFT.h>
 extern uint8_t BigFont[]; // TODO Declares font for LCD.
 UTFT display(ITDB28,A5,A4,A3,A2);
-
 
 
 
@@ -43,6 +42,8 @@ char* tetrominoDebug         = "OZIJLST";
 
 bool gameOver = false;
 
+bool lineClearing = false;
+
 // Board description -----------------------------------------------------------
 #define ROWS 22
 #define COLS 10
@@ -56,8 +57,20 @@ char oldPieceArray[4][4];
 volatile int currentPieceRow, currentPieceCol; // Top left of piece is tracked
 volatile int oldPieceRow, oldPieceCol;
 
+//Scoring ----------------------------------------------------------------------
+int lineCount = 0;
+int score = 0;
+int highScore = 0;
+int tempCount = 0;
+
+
+
+
+
 // PIECE GENERATION AND ROTATION -----------------------------------------------
 int counter = 0; // Initially choose first piece out of bag
+
+
 
 // Shuffle the bag of tetrominoes
 void shuffleBag(){
@@ -82,59 +95,61 @@ void shuffleBag(){
 
 // Grab a new piece
 void newPiece(){
-    
-    oldPieceCol = currentPieceCol;
-    oldPieceRow = currentPieceRow;
+    if(!lineClearing){
+        oldPieceCol = currentPieceCol;
+        oldPieceRow = currentPieceRow;
 
-    memcpy(oldPieceArray, currentPieceArray, GRIDSIZE);
+        memcpy(oldPieceArray, currentPieceArray, GRIDSIZE);
 
-    
-    #ifdef DEBUG
-    Serial.println("NP");
-    #endif
+        
+        #ifdef DEBUG
+        Serial.println("NP");
+        #endif
 
-    currentPieceRow = 0;
-    currentPieceCol = 3;
+        currentPieceRow = 0;
+        currentPieceCol = 3;
 
-    if (counter > 6){
-        counter = 0;
-        shuffleBag();
+        if (counter > 6){
+            counter = 0;
+            shuffleBag();
+        }
+
+        switch(pieceGenerationIndex[counter]){
+            case 0:
+                currentPiece = currentRotation = pieceIndex[0];
+                break;
+            case 1:
+                currentPiece = currentRotation = pieceIndex[1];
+                break;
+            case 2:
+                currentPiece = currentRotation = pieceIndex[5];
+                break;
+            case 3:
+                currentPiece = currentRotation = pieceIndex[9];
+                break;
+            case 4:
+                currentPiece = currentRotation = pieceIndex[13];
+                break;
+            case 5:
+                currentPiece = currentRotation = pieceIndex[17];
+                break;
+            case 6:
+                currentPiece = currentRotation = pieceIndex[21];
+                break;
+        }
+
+        for(int i = 0; i < SHAPESIZE; i++){
+           for(int j = 0; j < SHAPESIZE; j++){
+               currentPieceArray[i][j] = tetrominoes[currentPiece][i][j];
+
+           }
+        }
+
+        counter++;
+
+
+
     }
-
-    switch(pieceGenerationIndex[counter]){
-        case 0:
-            currentPiece = currentRotation = pieceIndex[0];
-            break;
-        case 1:
-            currentPiece = currentRotation = pieceIndex[1];
-            break;
-        case 2:
-            currentPiece = currentRotation = pieceIndex[5];
-            break;
-        case 3:
-            currentPiece = currentRotation = pieceIndex[9];
-            break;
-        case 4:
-            currentPiece = currentRotation = pieceIndex[13];
-            break;
-        case 5:
-            currentPiece = currentRotation = pieceIndex[17];
-            break;
-        case 6:
-            currentPiece = currentRotation = pieceIndex[21];
-            break;
-    }
-
-    for(int i = 0; i < SHAPESIZE; i++){
-       for(int j = 0; j < SHAPESIZE; j++){
-           currentPieceArray[i][j] = tetrominoes[currentPiece][i][j];
-
-       }
-    }
-
-    counter++;
-
-
 
 
 }
@@ -288,8 +303,6 @@ void rotate(){
 #define MOVE_ROTATE 3
 
 volatile int timer = 0; // Tick counter, stored in RAM
-volatile int lockdelay = 0; // lock delay counter, stored in RAM
-int lock = 20; // TODO right value? lock delay never changes
 int gravity = 60; // gravity delay starts at 1 drop / second
 
 // Initialise the game
@@ -308,11 +321,16 @@ void initialise(){
 
     memcpy(oldPieceArray, currentPieceArray, GRIDSIZE);
 
- 
+    score = 0;
+    lineCount = 0;
+    tempCount = 0;
+    gravity = 60;
 
 
     display.clrScr();
     display.fillScr(200,0,50);
+
+    printScore();
 
 
 
@@ -416,13 +434,15 @@ void movePiece(int direction){
             }
             break;
         case MOVE_DOWN:
-            if(checkBelow()){
+            if(checkBelow() && !lineClearing){
                 currentPieceRow++;
                 timer = 0;
             }
             else{
                 placePiece();
-                newPiece();
+                if(!lineClearing){
+                    newPiece();
+                }
             }
             break;
         case MOVE_ROTATE:
@@ -435,26 +455,36 @@ void movePiece(int direction){
 //Test if a deadblock goes above the visible board
 
 void checkGameOver(){
+    bool tempBool = false;
     if(!gameOver){
 
         for(int i = 0; i < 2; i++){
             for(int j = 0; j < COLS; j++){
                 if(deadBlocks[i][j] != BLACK){
-                    gameOver = true;
-                    #ifdef DEBUG
-                    Serial.println("!GAME OVER!");
-                    #endif
-                    display.clrScr();
-                    display.fillScr(6,101,255);
-                    display.setBackColor(6,101,255);
-                    // say game over!
-                    display.setColor(255,90,40);
-                    display.print("GAME OVER", CENTER,0); 
-                    display.print("Please press", CENTER, 50); 
-                    display.print("reset.", CENTER, 80); 
+                    tempBool = true;
                 }
 
             }
+        }
+        if(tempBool == true){
+            gameOver = true;
+            #ifdef DEBUG
+            Serial.println("!GAME OVER!");
+            #endif
+            display.clrScr();
+            display.fillScr(6,101,255);
+            display.setBackColor(6,101,255);
+            // say game over!
+            display.setColor(255,90,40);
+            display.print("GAME OVER", CENTER,0); 
+            display.print("Please press", CENTER, 50); 
+            display.print("reset.", CENTER, 80);
+            display.print("Your Score:", CENTER, 125); 
+            display.printNumI(score, CENTER, 150);
+            display.print("High:", CENTER, 175); 
+            display.printNumI(highScore, CENTER, 200);
+            display.print("Lines cleared:", CENTER, 225); 
+            display.printNumI(lineCount, CENTER, 250);
         }
     }
 }
@@ -470,6 +500,8 @@ void reset(){
             oldBoard[i][j] = BLACK;
         }
     }
+    score = 0;
+    lineClear = 0;
     display.clrScr();
     display.fillScr(255,0,0);
     display.setColor(VGA_LIME);
@@ -488,7 +520,7 @@ void checkLineClear(){
     #ifdef DEBUG3
     Serial.println("Starting to check line!");
     #endif
-    
+    tempCount = 0;
     lineClear = true;
     for(int i = 0; i < SHAPESIZE; i++){
         for(int j = 0; j < SHAPESIZE; j++){
@@ -510,7 +542,6 @@ void checkLineClear(){
                 //breaks to here
 
                 if(lineClear == true){//If nothing is black in the line, clear it, then drop dead blocks
-                    
                     #ifdef DEBUG5
                     Serial.println("LINE CLEARING");
                     #endif
@@ -518,16 +549,55 @@ void checkLineClear(){
                     for(int b = 0; b < COLS; b++){
                         deadBlocks[oldPieceRow+i][b] = BLACK;
                     }
+                    
                     #ifdef DEBUG5
                     Serial.println("line cleared:");
                     Serial.println(oldPieceRow+i);
                     #endif
+
                     moveDeadBlocksDown(oldPieceRow+i-1);
+
+                    tempCount++;
+                    lineCount++;
+
                 }
+
                 
             }
         }
-    } 
+    }
+    if (tempCount == 1){
+        score += 100;
+    }
+    else if(tempCount == 2){
+        score += 250;
+    }
+    else if(tempCount == 3){
+        score += 500;
+    }
+    else if(tempCount == 4){
+        score += 800;
+    }
+    if(score > highScore){
+        highScore = score;
+    }
+    printScore();
+    if(lineCount >= 40){
+        gravity = 18;
+    }
+    else if(lineCount >= 30){
+        gravity = 28;
+    }
+    else if(lineCount >= 20){
+        gravity = 37;
+    }
+    else if(lineCount >= 10){
+        gravity = 45;
+    }
+    else if(lineCount >= 5){
+        gravity = 50;
+    }
+    lineClearing = false;
 }
 
 void moveDeadBlocksDown(int currentRow){
@@ -561,6 +631,8 @@ void tick(){
 
     timer++;
 
+
+
     if ((timer > gravity) && (gameOver == false)){
         movePiece(MOVE_DOWN);
         timer = 0;
@@ -578,45 +650,6 @@ void tick(){
 // Redraw the screen
 void redraw(){
 
-    #ifdef DEBUG2
-    Serial.println("OLD PIECE");
-    for(int i = 0; i<SHAPESIZE;i++){
-        for(int j = 0; j<SHAPESIZE;j++){
-            Serial.print(int(oldPieceArray[i][j]));
-        }
-        Serial.println();
-    }
-    Serial.println();
-    Serial.println("NEW PIECE");
-    for(int i = 0; i<SHAPESIZE;i++){
-        for(int j = 0; j<SHAPESIZE;j++){
-            Serial.print(int(currentPieceArray[i][j]));
-        }
-        Serial.println();
-    }
-    Serial.println();
-    #endif
-    #ifdef DEBUG4
-    Serial.println();
-    Serial.println();
-    Serial.println();
-    Serial.println();
-    Serial.println();
-    Serial.println();
-    Serial.println();
-    Serial.print("old Row: ");
-    Serial.println(oldPieceRow);
-    Serial.println();
-    Serial.print("old Col: ");
-    Serial.println(oldPieceCol);
-    Serial.println();
-    Serial.print("curr Row: ");
-    Serial.println(currentPieceRow);
-    Serial.println();
-    Serial.print("curr Col: ");
-    Serial.println(currentPieceCol);
-    Serial.println();
-    #endif
 
 
     //make the oldBoard = board.
@@ -714,6 +747,18 @@ void redraw(){
             }
         }
     }
+}
+
+
+void printScore(){
+    display.setBackColor(200,0,50);
+    display.setColor(VGA_LIME);
+    display.print("High:", 135, 10);
+    display.printNumI(highScore, 135, 40);
+    display.print("Score:", 135, 85);
+    display.printNumI(score, 135, 115);
+    display.print("Lines:", 135, 160);
+    display.printNumI(lineCount, 135, 190);
 
 }
 
@@ -729,12 +774,12 @@ void setup(){
 
     // Start the LCD
     display.InitLCD(0); // Set as portrait mode
-    display.setFont(BigFont); // Use small font for scores (if any at all!)
+    display.setFont(BigFont); // Use big font for scores (if any at all!)
     display.clrScr();
-    display.setBackColor(VGA_BLACK);
 
     // Initialise game
     initialise();
+
     
     //initilise pin 9 - see http://www.me.ucsb.edu/~me170c/Code/How_to_Enable_Interrupts_on_ANY_pin.pdf
     //to see list of (port?) numbers.
@@ -839,6 +884,7 @@ void loop(){
         if(lastRotPress == LOW){
             movePiece(MOVE_ROTATE);
             lastRotPress = HIGH;
+            delay(20);
         }
     }
 
@@ -860,33 +906,7 @@ void loop(){
 
     //====================================================
 
-
-
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
