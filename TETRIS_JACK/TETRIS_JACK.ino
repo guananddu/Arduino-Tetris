@@ -61,7 +61,7 @@ volatile int oldPieceRow, oldPieceCol;
 int lineCount = 0;
 int score = 0;
 int highScore = 0;
-int tempCount = 0;
+
 
 
 
@@ -323,7 +323,6 @@ void initialise(){
 
     score = 0;
     lineCount = 0;
-    tempCount = 0;
     gravity = 60;
 
 
@@ -520,7 +519,7 @@ void checkLineClear(){
     #ifdef DEBUG3
     Serial.println("Starting to check line!");
     #endif
-    tempCount = 0;
+    int tempCount = 0;
     lineClear = true;
     for(int i = 0; i < SHAPESIZE; i++){
         for(int j = 0; j < SHAPESIZE; j++){
@@ -542,6 +541,7 @@ void checkLineClear(){
                 //breaks to here
 
                 if(lineClear == true){//If nothing is black in the line, clear it, then drop dead blocks
+                    lineClearing = true;
                     #ifdef DEBUG5
                     Serial.println("LINE CLEARING");
                     #endif
@@ -597,6 +597,8 @@ void checkLineClear(){
     else if(lineCount >= 5){
         gravity = 50;
     }
+    redraw();
+    delay(75);
     lineClearing = false;
 }
 
@@ -807,7 +809,7 @@ void setup(){
 
 // TIMER INTERRUPT SERVICE ROUTINE ---------------------------------------------
 ISR(TIMER1_COMPA_vect){
-    if(!gameOver)
+    if(!gameOver && !lineClearing)
         tick();
     else{
 
@@ -838,7 +840,7 @@ char lastRotPress = LOW;
 char lastResPress = LOW;
 
 void loop(){
-    
+
 
 
 
@@ -869,10 +871,14 @@ void loop(){
     
     //Down button pressed
     if((digitalRead(DBUTTON) == HIGH) && (gameOver == false)){
+     //   pressCount++
         if(lastDownPress == LOW){
             movePiece(MOVE_DOWN);
             lastDownPress = HIGH;
         }
+        // if(pressCount > 100){
+        //     movePiece(MOVE_DOWN);
+        // }
     }
 
     else{
@@ -884,11 +890,11 @@ void loop(){
         if(lastRotPress == LOW){
             movePiece(MOVE_ROTATE);
             lastRotPress = HIGH;
-            delay(20);
         }
     }
 
     else{
+        delay(20);
         lastRotPress = LOW;
     }
 
@@ -907,10 +913,4 @@ void loop(){
     //====================================================
 
 }
-
-
-
-
-
-
 
