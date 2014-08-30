@@ -582,16 +582,13 @@ void checkLineClear(){
         highScore = score;
     }
     printScore();
-    if(lineCount >= 30){
+    if(lineCount >= 20){
         gravity = 10;
     }
-    else if(lineCount >= 20){
+    else if(lineCount >= 15){
         gravity = 20;
     }
     else if(lineCount >= 10){
-        gravity = 25;
-    }
-    else if(lineCount >= 7){
         gravity = 30;
     }
     else if(lineCount >= 5){
@@ -916,3 +913,4 @@ void loop(){
     //====================================================
 
 }
+
