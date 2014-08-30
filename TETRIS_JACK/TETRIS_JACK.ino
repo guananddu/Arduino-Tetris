@@ -508,7 +508,6 @@ void reset(){
     display.print("RESET", CENTER,50);
     delay(830);
     display.clrScr();
-    delay(400);
 
     initialise();
 
@@ -753,15 +752,16 @@ void redraw(){
 
 
 void printScore(){
-    display.setBackColor(200,0,50);
-    display.setColor(VGA_LIME);
-    display.print("High:", 135, 10);
-    display.printNumI(highScore, 135, 40);
-    display.print("Score:", 135, 85);
-    display.printNumI(score, 135, 115);
-    display.print("Lines:", 135, 160);
-    display.printNumI(lineCount, 135, 190);
-
+    if(!gameOver){
+        display.setBackColor(200,0,50);
+        display.setColor(VGA_LIME);
+        display.print("High:", 135, 10);
+        display.printNumI(highScore, 135, 40);
+        display.print("Score:", 135, 85);
+        display.printNumI(score, 135, 115);
+        display.print("Lines:", 135, 160);
+        display.printNumI(lineCount, 135, 190);
+    }
 }
 
 
@@ -888,13 +888,13 @@ void loop(){
     //Rot button pressed
     if((digitalRead(ROTBUTTON) == HIGH) && (gameOver == false)){
         if(lastRotPress == LOW){
+          delay(20);
             movePiece(MOVE_ROTATE);
             lastRotPress = HIGH;
         }
     }
 
     else{
-        delay(20);
         lastRotPress = LOW;
     }
 
@@ -913,4 +913,7 @@ void loop(){
     //====================================================
 
 }
+
+
+
 
